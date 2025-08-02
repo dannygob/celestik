@@ -11,7 +11,31 @@ class AprilTagManager {
         val decisionMargin: Float,
         val center: DoubleArray,
         val corners: DoubleArray,
-    )
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Marker
+
+            if (id != other.id) return false
+            if (hamming != other.hamming) return false
+            if (decisionMargin != other.decisionMargin) return false
+            if (!center.contentEquals(other.center)) return false
+            if (!corners.contentEquals(other.corners)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = id
+            result = 31 * result + hamming
+            result = 31 * result + decisionMargin.hashCode()
+            result = 31 * result + center.contentHashCode()
+            result = 31 * result + corners.contentHashCode()
+            return result
+        }
+    }
 
     fun init() {
         ApriltagNative.apriltagInit("tag36h11", 1, 1.0f, 0.0f, 4, 1, 0.25)

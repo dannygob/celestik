@@ -5,9 +5,9 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.example.celestic.models.geometry.BoundingBox
 import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
+import com.example.celestik.models.geometry.BoundingBox
 import kotlinx.parcelize.Parcelize
 
 @Entity(

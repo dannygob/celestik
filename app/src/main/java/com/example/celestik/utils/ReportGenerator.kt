@@ -22,11 +22,71 @@ fun generatePdfFromDetections(
 
     document.add(Paragraph("Reporte de Detecciones - Lote: $loteId"))
     detections.forEach {
-        document.add(Paragraph("ID: ${it.id}"))
-        document.add(Paragraph("Tipo: ${it.type}"))
-        document.add(Paragraph("Confianza: ${it.confidence}"))
-        document.add(Paragraph("Status: ${it.status}"))
-        document.add(Paragraph("--------------------"))
+        document.add(
+            Paragraph(
+                "ID: ${it.id}",
+                style = TODO(),
+                constraints = TODO(),
+                density = TODO(),
+                fontFamilyResolver = TODO(),
+                spanStyles = TODO(),
+                placeholders = TODO(),
+                maxLines = TODO(),
+                ellipsis = TODO()
+            )
+        )
+        document.add(
+            Paragraph(
+                "Tipo: ${it.type}",
+                style = TODO(),
+                constraints = TODO(),
+                density = TODO(),
+                fontFamilyResolver = TODO(),
+                spanStyles = TODO(),
+                placeholders = TODO(),
+                maxLines = TODO(),
+                ellipsis = TODO()
+            )
+        )
+        document.add(
+            Paragraph(
+                "Confianza: ${it.confidence}",
+                style = TODO(),
+                constraints = TODO(),
+                density = TODO(),
+                fontFamilyResolver = TODO(),
+                spanStyles = TODO(),
+                placeholders = TODO(),
+                maxLines = TODO(),
+                ellipsis = TODO()
+            )
+        )
+        document.add(
+            Paragraph(
+                "Status: ${it.status}",
+                style = TODO(),
+                constraints = TODO(),
+                density = TODO(),
+                fontFamilyResolver = TODO(),
+                spanStyles = TODO(),
+                placeholders = TODO(),
+                maxLines = TODO(),
+                ellipsis = TODO()
+            )
+        )
+        document.add(
+            Paragraph(
+                "--------------------",
+                style = TODO(),
+                constraints = TODO(),
+                density = TODO(),
+                fontFamilyResolver = TODO(),
+                spanStyles = TODO(),
+                placeholders = TODO(),
+                maxLines = TODO(),
+                ellipsis = TODO()
+            )
+        )
     }
 
     document.close()

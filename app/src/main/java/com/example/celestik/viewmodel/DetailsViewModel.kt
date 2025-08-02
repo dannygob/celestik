@@ -3,10 +3,10 @@ package com.example.celestik.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.celestic.utils.Result
 import com.example.celestik.data.repository.DetectionRepository
 import com.example.celestik.models.TrazabilidadItem
 import com.example.celestik.models.calibration.DetectedFeature
+import com.example.celestik.utils.Result
 import com.example.celestik.utils.buscarPorCodigo
 import com.example.celestik.utils.cargarTrazabilidadDesdeJson
 import dagger.hilt.android.lifecycle.HiltViewModel

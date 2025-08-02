@@ -13,9 +13,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.celestic.utils.Result
 import com.example.celestik.models.DetectionItem
 import com.example.celestik.ui.component.BlueprintView
+import com.example.celestik.utils.Result
 import com.example.celestik.viewmodel.DetailsViewModel
 import com.example.celestik.viewmodel.SharedViewModel
 
