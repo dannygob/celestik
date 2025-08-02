@@ -1,4 +1,4 @@
-package com.example.celestic.models.report
+package com.example.celestik.models.report
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

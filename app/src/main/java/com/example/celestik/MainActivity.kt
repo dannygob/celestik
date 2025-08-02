@@ -9,8 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.celestic.navigation.NavigationGraph
+import androidx.navigation.compose.rememberNavController
+import com.example.celestik.navigation.NavigationGraph
+import com.example.celestik.ui.theme.CelesticTheme
 import com.example.celestik.ui.theme.CelestikTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

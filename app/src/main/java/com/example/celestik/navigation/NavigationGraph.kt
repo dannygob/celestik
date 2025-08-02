@@ -1,4 +1,4 @@
-package com.example.celestic.navigation
+package com.example.celestik.navigation
 
 
 import androidx.compose.runtime.Composable
@@ -7,15 +7,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.celestic.ui.screen.CalibrationScreen
-import com.example.celestic.ui.screen.CameraScreen
-import com.example.celestic.ui.screen.DashboardScreen
-import com.example.celestic.ui.screen.DetailsScreen
-import com.example.celestic.ui.screen.DetectionListScreen
-import com.example.celestic.ui.screen.InspectionPreviewScreen
-import com.example.celestic.ui.screen.LoginScreen
-import com.example.celestic.ui.screen.ReportRequestDialog
-import com.example.celestic.ui.screen.SettingsScreen
+import com.example.celestik.ui.screen.CalibrationScreen
+import com.example.celestik.ui.screen.CameraScreen
+import com.example.celestik.ui.screen.DashboardScreen
+import com.example.celestik.ui.screen.DetailsScreen
+import com.example.celestik.ui.screen.DetectionListScreen
+import com.example.celestik.ui.screen.InspectionPreviewScreen
+import com.example.celestik.ui.screen.LoginScreen
+import com.example.celestik.ui.screen.ReportRequestDialog
+import com.example.celestik.ui.screen.SettingsScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {

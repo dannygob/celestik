@@ -1,12 +1,12 @@
-package com.example.celestic.models.report
+package com.example.celestik.models.report
 
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.celestic.models.enums.DetectionStatus
-import com.example.celestic.models.enums.DetectionType
+import com.example.celestik.models.enums.DetectionStatus
+import com.example.celestik.models.enums.DetectionType
 import kotlinx.parcelize.Parcelize
 
 /**

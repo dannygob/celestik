@@ -1,4 +1,4 @@
-package com.example.celestic.utils
+package com.example.celestik.utils
 
 import android.content.Context
 import android.util.Log

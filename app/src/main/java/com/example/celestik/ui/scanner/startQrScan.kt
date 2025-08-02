@@ -1,4 +1,4 @@
-package com.example.celestic.ui.scanner
+package com.example.celestik.ui.scanner
 
 
 import android.graphics.Bitmap

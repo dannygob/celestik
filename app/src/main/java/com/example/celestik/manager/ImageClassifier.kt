@@ -1,4 +1,4 @@
-package com.example.celestic.manager
+package com.example.celestik.manager
 
 import android.content.Context
 import android.graphics.Bitmap

@@ -1,4 +1,4 @@
-package com.example.celestic.navigation
+package com.example.celestik.navigation
 
 
 sealed class NavigationRoutes(val route: String) {

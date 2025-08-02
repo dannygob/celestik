@@ -1,4 +1,4 @@
-package com.example.celestic.ui.screen
+package com.example.celestik.ui.screen
 
 
 import android.Manifest
@@ -22,9 +22,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.celestic.manager.ImageClassifier
-import com.example.celestic.utils.OpenCVInitializer
-import com.example.celestic.viewmodel.MainViewModel
+import com.example.celestik.manager.ImageClassifier
+import com.example.celestik.utils.OpenCVInitializer
+import com.example.celestik.viewmodel.MainViewModel
 import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
@@ -96,7 +96,7 @@ private fun startCamera(
         val cameraProvider = cameraProviderFuture.get()
 
         val preview = Preview.Builder().build().apply {
-            setSurfaceProvider(previewView.surfaceProvider)
+            surfaceProvider = previewView.surfaceProvider
         }
 
         val imageAnalysis = ImageAnalysis.Builder()

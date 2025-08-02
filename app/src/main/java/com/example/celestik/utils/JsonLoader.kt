@@ -1,7 +1,7 @@
-package com.example.celestic.utils
+package com.example.celestik.utils
 
 import android.content.Context
-import com.example.celestic.models.TrazabilidadItem
+import com.example.celestik.models.TrazabilidadItem
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 

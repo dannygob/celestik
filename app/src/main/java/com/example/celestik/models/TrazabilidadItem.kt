@@ -1,4 +1,4 @@
-package com.example.celestic.models
+package com.example.celestik.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

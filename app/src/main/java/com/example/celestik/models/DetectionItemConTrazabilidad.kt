@@ -1,4 +1,4 @@
-package com.example.celestic.models
+package com.example.celestik.models
 
 
 data class DetectionItemConTrazabilidad(

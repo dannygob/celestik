@@ -1,4 +1,4 @@
-package com.example.celestic.ui.screen
+package com.example.celestik.ui.screen
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -7,10 +7,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.celestic.ui.component.DetectionItemCard
-import com.example.celestic.ui.component.ShimmerDetectionItemCard
 import com.example.celestic.utils.Result
-import com.example.celestic.viewmodel.MainViewModel
+import com.example.celestik.ui.component.DetectionItemCard
+import com.example.celestik.ui.component.ShimmerDetectionItemCard
+import com.example.celestik.viewmodel.MainViewModel
 
 @Composable
 fun DetectionListScreen(

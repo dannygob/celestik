@@ -1,4 +1,4 @@
-package com.example.celestic.ui.component
+package com.example.celestik.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

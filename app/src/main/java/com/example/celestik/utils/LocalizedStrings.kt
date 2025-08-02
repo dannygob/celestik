@@ -1,4 +1,4 @@
-package com.example.celestic.utils
+package com.example.celestik.utils
 
 import androidx.compose.runtime.compositionLocalOf
 

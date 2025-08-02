@@ -1,11 +1,11 @@
-package com.example.celestic.utils
+package com.example.celestik.utils
 
 import android.content.Context
-import com.example.celestic.models.DetectionItem
-import com.itextpdf.kernel.pdf.PdfDocument
+import android.graphics.pdf.PdfDocument
+import android.provider.DocumentsContract
+import androidx.compose.ui.text.Paragraph
+import com.example.celestik.models.DetectionItem
 import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import com.itextpdf.layout.element.Paragraph
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.File
 import java.io.FileOutputStream
@@ -18,7 +18,7 @@ fun generatePdfFromDetections(
     val file = File(context.getExternalFilesDir(null), "ReporteCelestic_$loteId.pdf")
     val writer = PdfWriter(file)
     val pdf = PdfDocument(writer)
-    val document = Document(pdf)
+    val document = DocumentsContract.Document(pdf)
 
     document.add(Paragraph("Reporte de Detecciones - Lote: $loteId"))
     detections.forEach {

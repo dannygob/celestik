@@ -1,4 +1,4 @@
-package com.example.celestic.ui.screen
+package com.example.celestik.ui.screen
 
 import android.widget.Toast
 import androidx.compose.material3.*

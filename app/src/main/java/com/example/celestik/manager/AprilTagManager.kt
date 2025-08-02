@@ -1,4 +1,4 @@
-package com.example.celestic.manager
+package com.example.celestik.manager
 
 import com.taylor.demo.apriltag.ApriltagNative
 import org.opencv.core.Mat

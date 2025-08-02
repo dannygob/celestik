@@ -1,4 +1,4 @@
-package com.example.celestic.ui.component
+package com.example.celestik.ui.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,10 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.celestic.models.DetectionItem
-import com.example.celestic.models.enums.DetectionStatus
-import com.example.celestic.models.enums.DetectionType
 import com.example.celestic.models.geometry.BoundingBox
+import com.example.celestik.models.DetectionItem
+import com.example.celestik.models.enums.DetectionStatus
+import com.example.celestik.models.enums.DetectionType
 
 @Composable
 fun DetectionItemCard(item: DetectionItem) {
