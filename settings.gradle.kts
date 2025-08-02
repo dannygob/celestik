@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "celestik"
 include(":app")
- 
+include(":opencv")
