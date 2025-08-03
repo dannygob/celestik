@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.createBitmap
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.celestik.manager.ImageClassifier
@@ -147,7 +148,7 @@ private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
     val rgbMat = Mat()
     Imgproc.cvtColor(yuvMat, rgbMat, Imgproc.COLOR_YUV2RGB_NV21)
 
-    val bmp = Bitmap.createBitmap(rgbMat.cols(), rgbMat.rows(), Bitmap.Config.ARGB_8888)
+    val bmp = createBitmap(rgbMat.cols(), rgbMat.rows())
     Utils.matToBitmap(rgbMat, bmp)
 
     yuvMat.release()
