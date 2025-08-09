@@ -20,6 +20,12 @@ data class LocalizedStrings(
     val toastModeCarroceria: String = "Mod Carrocería seleccionado",
     val toastModePrecision: String = "Modo Precisión seleccionado",
     val toastModeMetales: String = "Modo Metal seleccionado",
+    val exportFormat: String = "Formato de exportación:",
+    val reportGenerated: String = "Reporte generado",
+    val reportError: String = "Error al generar el reporte",
+    val appBarTitle: String = "Celestik Dashboard",
+    val generateReportButton: String = "Generar reporte",
+    val viewDetections: String = "Ver Detecciones",
 )
 
 val LocalizedStrings = compositionLocalOf { LocalizedStrings() }

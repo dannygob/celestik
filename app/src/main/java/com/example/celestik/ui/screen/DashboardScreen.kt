@@ -1,20 +1,21 @@
 package com.example.celestik.ui.screen
 
-
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.celestik.navigation.NavigationRoutes
-import com.example.celestik.utils.*
+import com.example.celestik.utils.LocalizedStrings
+import com.example.celestik.utils.exportJsonSummary
+import com.example.celestik.utils.generateCsvFromDetections
+import com.example.celestik.utils.generatePdfFromDetections
+import com.example.celestik.utils.generateWordFromDetections
 import com.example.celestik.viewmodel.MainViewModel
-import java.util.*
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,13 +25,14 @@ fun DashboardScreen(
 ) {
     val context = LocalContext.current
     val strings = LocalizedStrings.current
+
     var useCharuco by remember { mutableStateOf(true) }
     val formatos = listOf("PDF", "Word", "JSON", "CSV")
     var formatoSeleccionado by remember { mutableStateOf("PDF") }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Celestic Dashboard") })
+            TopAppBar(title = { Text(strings.appBarTitle) })
         }
     ) { paddingValues ->
         Column(
@@ -46,7 +48,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔧 Sección Configuración
+            // 🔧 Calibración
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(
@@ -60,8 +62,7 @@ fun DashboardScreen(
                                 context,
                                 strings.toastOpenCalibration,
                                 Toast.LENGTH_SHORT
-                            )
-                                .show()
+                            ).show()
                             navController.navigate(NavigationRoutes.Calibration.route)
                         }) {
                             Text(strings.openCalibration)
@@ -69,15 +70,20 @@ fun DashboardScreen(
 
                         Spacer(Modifier.width(16.dp))
 
-                        Switch(checked = useCharuco, onCheckedChange = {
-                            useCharuco = it
-                            val marker = if (useCharuco) "Charuco" else "AprilTag"
-                            Toast.makeText(
-                                context,
-                                "Marcador seleccionado: $marker",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        })
+                        Switch(
+                            checked = useCharuco,
+                            onCheckedChange = {
+                                useCharuco = it
+                                val marker = if (useCharuco) "Charuco" else "AprilTag"
+                                Toast.makeText(
+                                    context,
+                                    "Marcador seleccionado: $marker",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        )
+
+                        Spacer(Modifier.width(8.dp))
                         Text(if (useCharuco) "Charuco" else "AprilTag")
                     }
                 }
@@ -85,7 +91,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 🚀 Sección Modalidades de inspección
+            // 🚀 Modos de inspección
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(strings.analysisModes, style = MaterialTheme.typography.titleMedium)
@@ -121,17 +127,25 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 📊 Sección Historial y generación de reportes
+            // 📊 Reportes
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(strings.reportsSection, style = MaterialTheme.typography.titleMedium)
 
                     Spacer(Modifier.height(8.dp))
 
-                    Text("Formato de exportación:", style = MaterialTheme.typography.bodyMedium)
+                    Text(strings.exportFormat, style = MaterialTheme.typography.bodyMedium)
+
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         formatos.forEach { formato ->
-                            Button(onClick = { formatoSeleccionado = formato }) {
+                            val isSelected = formatoSeleccionado == formato
+                            Button(
+                                onClick = { formatoSeleccionado = formato },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+                                    contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+                                )
+                            ) {
                                 Text(formato)
                             }
                         }
@@ -140,7 +154,7 @@ fun DashboardScreen(
                     Spacer(Modifier.height(16.dp))
 
                     Button(onClick = {
-                        val loteId = "Lote123"
+                        val loteId = "Lote123" // 🔧 Puedes hacerlo dinámico si quieres
                         val detecciones = viewModel.detections.value
 
                         val archivo = when (formatoSeleccionado) {
@@ -151,31 +165,36 @@ fun DashboardScreen(
                             else -> null
                         }
 
-                        archivo?.let {
+                        if (archivo != null) {
                             Toast.makeText(
                                 context,
-                                "Reporte generado: ${it.name}",
+                                "${strings.reportGenerated}: ${archivo.name}",
                                 Toast.LENGTH_LONG
-                            )
-                                .show()
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                strings.reportError,
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }) {
-                        Text("Generar reporte ($formatoSeleccionado)")
+                        Text("${strings.generateReportButton} ($formatoSeleccionado)")
                     }
 
                     Spacer(Modifier.height(8.dp))
 
                     Button(onClick = {
-                        navController.navigate("detection_list")
+                        navController.navigate(NavigationRoutes.DetectionList.route)
                     }) {
-                        Text("View Detections")
+                        Text(strings.viewDetections)
                     }
                 }
             }
 
             Spacer(Modifier.height(20.dp))
 
-            // 🌐 Multilenguaje
+            // 🌐 Idioma
             Text(
                 text = strings.languageSettingHint,
                 style = MaterialTheme.typography.bodyMedium
