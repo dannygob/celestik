@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.10.2)
+
+project("celestik")
+
+# 🔧 Incluye headers desde el código fuente de OpenCV
+include_directories(
+    ${CMAKE_SOURCE_DIR}/src/main/cpp/include
+
+    C:/Users/compu/AndroidStudioProjects/celestik/opencv/modules/core/include
+    C:/Users/compu/AndroidStudioProjects/celestik/opencv/modules/imgproc/include
+    C:/Users/compu/AndroidStudioProjects/celestik/opencv/modules/features2d/include
+)
+
+# 📦 Importa las bibliotecas nativas
+add_library(opencv_core SHARED IMPORTED)
+set_target_properties(opencv_core PROPERTIES IMPORTED_LOCATION
+    ${CMAKE_SOURCE_DIR}/src/main/jniLibs/arm64-v8a/libopencv_core.so)
+
+add_library(opencv_imgproc SHARED IMPORTED)
+set_target_properties(opencv_imgproc PROPERTIES IMPORTED_LOCATION
+    ${CMAKE_SOURCE_DIR}/src/main/jniLibs/arm64-v8a/libopencv_imgproc.so)
+
+add_library(opencv_features2d SHARED IMPORTED)
+set_target_properties(opencv_features2d PROPERTIES IMPORTED_LOCATION
+    ${CMAKE_SOURCE_DIR}/src/main/jniLibs/arm64-v8a/libopencv_features2d.so)
+
+# 👇 Agrega tu código nativo
+add_library(
+    native-lib
+    SHARED
+    src/main/cpp/native-lib.cpp
+)
+
+# 🔗 Enlaza tu código con OpenCV
+target_link_libraries(
+    native-lib
+    opencv_core
+    opencv_imgproc
+    opencv_features2d
+)
