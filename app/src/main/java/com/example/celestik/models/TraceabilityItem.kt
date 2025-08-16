@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TrazabilityItem(
+data class TraceabilityItem(
     val codigo: String,
     val pieza: String,
     val operario: String,
