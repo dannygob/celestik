@@ -1,11 +1,13 @@
 package com.example.celestik.navigation
 
-
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.celestik.manager.AprilTagManager
 import com.example.celestik.ui.screen.CalibrationScreen
 import com.example.celestik.ui.screen.CameraScreen
 import com.example.celestik.ui.screen.DashboardScreen
@@ -18,19 +20,24 @@ import com.example.celestik.ui.screen.SettingsScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-    _root_ide_package_.androidx.navigation.NavHost(
+    // Crear y recordar el AprilTagManager para detección de tags
+    val aprilTagManager = remember { AprilTagManager().apply { init() } }
+
+    NavHost(
         navController = navController,
         startDestination = "login"
     ) {
         composable("login") {
             LoginScreen(navController)
         }
+
         composable(NavigationRoutes.Dashboard.route) {
             DashboardScreen(navController)
         }
 
         composable(NavigationRoutes.Camera.route) {
-            CameraScreen(navController)
+            // Pasamos la instancia del detector al CameraScreen
+            CameraScreen(navController, aprilTagManager)
         }
 
         composable(
@@ -55,9 +62,11 @@ fun NavigationGraph(navController: NavHostController) {
         composable(NavigationRoutes.Preview.route) {
             InspectionPreviewScreen(navController)
         }
+
         composable("settings") {
             SettingsScreen(navController)
         }
+
         composable("detection_list") {
             DetectionListScreen(navController)
         }

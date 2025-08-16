@@ -1,11 +1,6 @@
 package com.example.celestik.ui.screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -33,31 +28,38 @@ fun SettingsScreen(
     ) {
         Text("Settings")
         Spacer(modifier = Modifier.height(16.dp))
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Dark Theme")
-            Spacer(modifier = Modifier.weight(1.0f))
+            Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = isDarkTheme,
                 onCheckedChange = { isDarkTheme = it }
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Use Inches")
-            Spacer(modifier = Modifier.weight(1.0f))
+            Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = useInches,
                 onCheckedChange = { viewModel.setUseInches(it) }
             )
         }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Use AprilTag")
-            Spacer(modifier = Modifier.weight(1.0f))
+            Text("AprilTag Detection")
+            Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = markerType == MarkerType.APRILTAG,
                 onCheckedChange = {
-                    viewModel.setMarkerType(if (it) MarkerType.APRILTAG else MarkerType.ARUCO)
+                    viewModel.setMarkerType(
+                        if (it) MarkerType.APRILTAG else MarkerType.ARUCO
+                    )
                 }
             )
         }

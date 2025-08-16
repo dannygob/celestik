@@ -5,9 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TraceabilityItem(
-    val codigo: String,
-    val pieza: String,
-    val operario: String,
-    val fecha: String,
-    val resultado: String,
+    val code: String,
+    val Pieces: String,
+    val operator: String,
+    val Date: String,
+    val results: String,
 ) : Parcelable

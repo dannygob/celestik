@@ -9,9 +9,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.celestik.manager.AprilTagManager
 
 @Composable
-fun CameraScreen(navController: NavController) {
+fun CameraScreen(navController: NavController, aprilTagManager: AprilTagManager) {
     val context = LocalContext.current
 
     Column(

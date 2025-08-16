@@ -13,5 +13,5 @@ fun loadTractabilityFromJson(context: Context): List<TraceabilityItem> {
 }
 
 fun searchForCode(code: String, list: List<TraceabilityItem>): TraceabilityItem? {
-    return list.firstOrNull { it.codigo == code }
+    return list.firstOrNull { it.code == code }
 }

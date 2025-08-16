@@ -32,19 +32,19 @@ fun DetailsScreen(
         "hole" -> stringResource(R.string.details_title_hole)
         "alodine" -> stringResource(R.string.details_title_alodine)
         "countersink" -> stringResource(R.string.details_title_countersink)
-        else -> "Detalle"
+        else -> "Details"
     }
 
     LaunchedEffect(detectionItem) {
-        detectionItem?.linkedQrCode?.let { codigo ->
-            viewModel.loadTrazabilidad(codigo)
+        detectionItem?.linkedQrCode?.let { code ->
+            viewModel.loadTraceability(code)
         }
         detectionItem?.id?.let {
             viewModel.loadFeatures(it)
         }
     }
 
-    val trazabilidadResult by detailsViewModel.traceabilityItem.collectAsState()
+    val traceabilityResult by detailsViewModel.traceabilityItem.collectAsState()
     val features by detailsViewModel.features.collectAsState()
     val useInches by sharedViewModel.useInches.collectAsState()
 
@@ -68,28 +68,28 @@ fun DetailsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         AnimatedVisibility(
-            visible = trazabilidadResult is Result.Success,
+            visible = traceabilityResult is Result.Success,
             enter = fadeIn(animationSpec = tween(durationMillis = 1000))
         ) {
-            val trazabilidad =
-                (trazabilidadResult as Result.Success).data
-            trazabilidad?.let {
-                Divider()
-                Text("🔍 Trazabilidad:", style = MaterialTheme.typography.titleMedium)
-                Text("• Código: ${it.codigo}")
-                Text("• Pieza: ${it.pieza}")
-                Text("• Operario: ${it.operario}")
-                Text("• Fecha: ${it.fecha}")
-                Text("• Resultado: ${it.resultado}")
-            } ?: Text("❌ No hay información de trazabilidad.")
+            val traceability =
+                (traceabilityResult as Result.Success).data
+            traceability?.let {
+                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+                Text("🔍 Traceability:", style = MaterialTheme.typography.titleMedium)
+                Text("• Code: ${it.code}")
+                Text("• Pieces: ${it.Pieces}")
+                Text("• operator: ${it.operator}")
+                Text("• Date: ${it.Date}")
+                Text("• Results: ${it.results}")
+            } ?: Text("❌ Without of Traceability.")
         }
 
-        if (trazabilidadResult is Result.Loading) {
+        if (traceabilityResult is Result.Loading) {
             CircularProgressIndicator()
         }
 
-        if (trazabilidadResult is Result.Error) {
-            Text("❌ Error al cargar la información de trazabilidad.")
+        if (traceabilityResult is Result.Error) {
+            Text("❌ Error to load the information of traceability.")
         }
 
         Spacer(modifier = Modifier.height(32.dp))

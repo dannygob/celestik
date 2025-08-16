@@ -2,15 +2,33 @@ package com.example.celestik.ui.screen
 
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.celestic.utils.*
 import com.example.celestik.models.DetectionItem
 import com.example.celestik.navigation.NavigationRoutes
 import com.example.celestik.utils.LocalizedStrings
@@ -19,7 +37,6 @@ import com.example.celestik.utils.generateCsvFromDetections
 import com.example.celestik.utils.generatePdfFromDetections
 import com.example.celestik.utils.generateWordFromDetections
 import com.example.celestik.viewmodel.MainViewModel
-import java.util.*
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,8 +48,8 @@ fun DashboardScreen(
     val context = LocalContext.current
     val strings = LocalizedStrings.current
     var useCharuco by remember { mutableStateOf(true) }
-    val formatos = listOf("PDF", "Word", "JSON", "CSV")
-    var formatoSeleccionado by remember { mutableStateOf("PDF") }
+    val formats = listOf("PDF", "Word", "JSON", "CSV")
+    var formatSelected by remember { mutableStateOf("PDF") }
 
     Scaffold(
         topBar = {
@@ -136,8 +153,8 @@ fun DashboardScreen(
 
                     Text("Formato de exportación:", style = MaterialTheme.typography.bodyMedium)
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        formatos.forEach { formato ->
-                            Button(onClick = { formatoSeleccionado = formato }) {
+                        formats.forEach { formato ->
+                            Button(onClick = { formatSelected = formato }) {
                                 Text(formato)
                             }
                         }
@@ -149,7 +166,7 @@ fun DashboardScreen(
                         val loteId = "Lote123"
                         val detecciones = viewModel.detections.value
 
-                        val archivo = when (formatoSeleccionado) {
+                        val archivo = when (formatSelected) {
                             "PDF" -> generatePdfFromDetections(
                                 context,
                                 detecciones as List<DetectionItem>, loteId
@@ -182,7 +199,7 @@ fun DashboardScreen(
                                 .show()
                         }
                     }) {
-                        Text("Generar reporte ($formatoSeleccionado)")
+                        Text("Generar reporte ($formatSelected)")
                     }
 
                     Spacer(Modifier.height(8.dp))
