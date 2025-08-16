@@ -1,11 +1,11 @@
 package com.example.celestik.models
 
 
-data class DetectionItemConTrazabilidad(
+data class DetectionItemWithTraceability(
     val detectionItem: DetectionItem,
     val traceability: TraceabilityItem?,
 )
 
-fun DetectionItem.conTrazabilidad(info: TraceabilityItem?): DetectionItemConTrazabilidad {
-    return DetectionItemConTrazabilidad(this, info)
+fun DetectionItem.withTraceability(info: TraceabilityItem?): DetectionItemWithTraceability {
+    return DetectionItemWithTraceability(this, info)
 }

@@ -13,7 +13,7 @@ import com.example.celestik.models.report.ReportConfig
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CelesticDao {
+interface CelestikDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: DetectionItem)
 

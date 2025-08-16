@@ -1,6 +1,6 @@
 package com.example.celestik.di
 
-import com.example.celestik.data.dao.CelesticDao
+import com.example.celestik.data.dao.CelestikDao
 import com.example.celestik.data.repository.DetectionRepository
 import dagger.Module
 import dagger.Provides
@@ -14,7 +14,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideDetectionRepository(celesticDao: CelesticDao): DetectionRepository {
-        return DetectionRepository(celesticDao)
+    fun provideDetectionRepository(celestikDao: CelestikDao): DetectionRepository {
+        return DetectionRepository(celestikDao)
     }
 }

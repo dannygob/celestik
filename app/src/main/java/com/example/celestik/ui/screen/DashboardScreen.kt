@@ -115,10 +115,10 @@ fun DashboardScreen(
 
                     Row {
                         Button(onClick = {
-                            Toast.makeText(context, strings.toastModeCarroceria, Toast.LENGTH_SHORT)
+                            Toast.makeText(context, strings.toastModeBody, Toast.LENGTH_SHORT)
                                 .show()
                         }) {
-                            Text(strings.modeCarroceria)
+                            Text(strings.modeBody)
                         }
 
                         Spacer(Modifier.width(8.dp))
@@ -133,10 +133,10 @@ fun DashboardScreen(
                         Spacer(Modifier.width(8.dp))
 
                         Button(onClick = {
-                            Toast.makeText(context, strings.toastModeMetales, Toast.LENGTH_SHORT)
+                            Toast.makeText(context, strings.toastModeMetals, Toast.LENGTH_SHORT)
                                 .show()
                         }) {
-                            Text(strings.modeMetales)
+                            Text(strings.modeMetals)
                         }
                     }
                 }

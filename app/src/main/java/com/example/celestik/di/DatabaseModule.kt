@@ -1,8 +1,8 @@
 package com.example.celestik.di
 
 import android.content.Context
-import com.example.celestik.data.dao.CelesticDao
-import com.example.celestik.database.CelesticDatabase
+import com.example.celestik.data.dao.CelestikDao
+import com.example.celestik.database.CelestikDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,12 +16,12 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): CelesticDatabase {
-        return CelesticDatabase.getDatabase(context)
+    fun provideDatabase(@ApplicationContext context: Context): CelestikDatabase {
+        return CelestikDatabase.getDatabase(context)
     }
 
     @Provides
-    fun provideCelesticDao(database: CelesticDatabase): CelesticDao {
-        return database.celesticDao()
+    fun provideCelestikDao(database: CelestikDatabase): CelestikDao {
+        return database.celestikDao()
     }
 }

@@ -13,7 +13,31 @@ class AprilTagManager {
         val decisionMargin: Float,
         val center: DoubleArray,
         val corners: DoubleArray,
-    )
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Marker
+
+            if (id != other.id) return false
+            if (hamming != other.hamming) return false
+            if (decisionMargin != other.decisionMargin) return false
+            if (!center.contentEquals(other.center)) return false
+            if (!corners.contentEquals(other.corners)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = id
+            result = 31 * result + hamming
+            result = 31 * result + decisionMargin.hashCode()
+            result = 31 * result + center.contentHashCode()
+            result = 31 * result + corners.contentHashCode()
+            return result
+        }
+    }
 
     // Detector configurado con la familia tag36h11
     private val detector: AprilTagDetector = AprilTagDetector.Builder()
@@ -42,7 +66,8 @@ class AprilTagManager {
         gray.get(0, 0, grayBytes)
 
         // Detectar los AprilTags usando la librería oficial
-        val detections: List<AprilTagDetection> = detector.detect(grayBytes, width, height)
+        val detections: List<AprilTagDetection> =
+            detector.detect(grayBytes, width, height) as List<AprilTagDetection>
 
         // Mapear detecciones a Marker para mantener tu estructura
         return detections.map { detection ->

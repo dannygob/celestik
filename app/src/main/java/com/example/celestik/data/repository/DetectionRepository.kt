@@ -1,6 +1,6 @@
 package com.example.celestik.data.repository
 
-import com.example.celestik.data.dao.CelesticDao
+import com.example.celestik.data.dao.CelestikDao
 import com.example.celestik.models.DetectionItem
 import com.example.celestik.models.Inspection
 import com.example.celestik.models.calibration.CameraCalibrationData
@@ -8,7 +8,7 @@ import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.models.report.ReportConfig
 import kotlinx.coroutines.flow.Flow
 
-class DetectionRepository(private val dao: CelesticDao) {
+class DetectionRepository(private val dao: CelestikDao) {
 
     suspend fun saveDetection(detection: DetectedFeature) {
         dao.insertDetection(detection)

@@ -1,8 +1,8 @@
 package com.example.celestik.utils
 
 import android.content.Context
+import android.graphics.pdf.PdfDocument
 import com.example.celestik.models.DetectionItem
-import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
