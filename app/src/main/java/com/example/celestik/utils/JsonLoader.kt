@@ -1,17 +1,17 @@
 package com.example.celestik.utils
 
 import android.content.Context
-import com.example.celestik.models.TrazabilityItem
+import com.example.celestik.models.TraceabilityItem
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 
-fun cargarTrazabilidadDesdeJson(context: Context): List<TrazabilityItem> {
-    val json = context.assets.open("trazabilidad.json").bufferedReader().use { it.readText() }
-    val type = object : TypeToken<List<TrazabilityItem>>() {}.type
+fun loadTractabilityFromJson(context: Context): List<TraceabilityItem> {
+    val json = context.assets.open("tractability.json").bufferedReader().use { it.readText() }
+    val type = object : TypeToken<List<TraceabilityItem>>() {}.type
     return Gson().fromJson(json, type)
 }
 
-fun buscarPorCodigo(codigo: String, lista: List<TrazabilityItem>): TrazabilityItem? {
-    return lista.firstOrNull { it.codigo == codigo }
+fun searchForCode(code: String, list: List<TraceabilityItem>): TraceabilityItem? {
+    return list.firstOrNull { it.codigo == code }
 }
