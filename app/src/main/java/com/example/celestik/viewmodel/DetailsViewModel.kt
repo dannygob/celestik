@@ -7,8 +7,8 @@ import com.example.celestik.data.repository.DetectionRepository
 import com.example.celestik.models.TraceabilityItem
 import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.utils.Result
-import com.example.celestik.utils.SearchForCode
 import com.example.celestik.utils.loadTractabilityFromJson
+import com.example.celestik.utils.searchForCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val lista = loadTractabilityFromJson(context)
-                _traceabilityItem.value = Result.Success(SearchForCode(codigo, lista))
+                _traceabilityItem.value = Result.Success(searchForCode(codigo, lista))
             } catch (e: Exception) {
                 _traceabilityItem.value = Result.Error(e)
             }
