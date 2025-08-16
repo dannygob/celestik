@@ -83,7 +83,7 @@ dependencies {
     // Otros
     implementation(libs.litert)
     implementation(libs.androidx.navigation.runtime.android)
-    //implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.gson)
