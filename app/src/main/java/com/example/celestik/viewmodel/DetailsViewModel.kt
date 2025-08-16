@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.celestik.data.repository.DetectionRepository
-import com.example.celestik.models.TrazabilityItem
+import com.example.celestik.models.TraceabilityItem
 import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.utils.Result
-import com.example.celestik.utils.buscarPorCodigo
-import com.example.celestik.utils.cargarTrazabilidadDesdeJson
+import com.example.celestik.utils.SearchForCode
+import com.example.celestik.utils.loadTractabilityFromJson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +22,8 @@ class DetailsViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ViewModel() {
 
-    private val _trazabilityItem = MutableStateFlow<Result<TrazabilityItem?>>(Result.Loading)
-    val trazabilityItem: StateFlow<Result<TrazabilityItem?>> = _trazabilityItem
+    private val _traceabilityItem = MutableStateFlow<Result<TraceabilityItem?>>(Result.Loading)
+    val traceabilityItem: StateFlow<Result<TraceabilityItem?>> = _traceabilityItem
 
     private val _features =
         MutableStateFlow<List<DetectedFeature>>(emptyList())
@@ -33,10 +33,10 @@ class DetailsViewModel @Inject constructor(
     fun loadTrazabilidad(codigo: String) {
         viewModelScope.launch {
             try {
-                val lista = cargarTrazabilidadDesdeJson(context)
-                _trazabilityItem.value = Result.Success(buscarPorCodigo(codigo, lista))
+                val lista = loadTractabilityFromJson(context)
+                _traceabilityItem.value = Result.Success(SearchForCode(codigo, lista))
             } catch (e: Exception) {
-                _trazabilityItem.value = Result.Error(e)
+                _traceabilityItem.value = Result.Error(e)
             }
         }
     }
