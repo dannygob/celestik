@@ -19,48 +19,48 @@ cameraLifecycle = "1.4.2"
 firebaseCrashlyticsBuildtools = "3.0.6"
 navigationComposeJvmstubs = "2.9.3"
 gson = "2.11.0"
-hilt-navigation-compose = "1.2.0" # Use the latest version
-apriltag = "2025.3.1" # ✅ Añadido
-
+hilt_navigation_compose = "1.2.0"
+apriltag = "2025.3.1"
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx_core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx_junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx_espresso_core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx_lifecycle_runtime_ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx_activity_compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx_compose_bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx_ui = { group = "androidx.compose.ui", name = "ui" }
+androidx_ui_graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx_ui_tooling_preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx_ui_test_manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx_ui_test_junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx_material3 = { group = "androidx.compose.material3", name = "material3" }
 
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt_android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt_android_compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx_hilt_navigation_compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt_navigation_compose" }
 
-androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
-androidx-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+androidx_room_common_jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+androidx_room_runtime_android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 
 litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "litert" }
-androidx-navigation-runtime-android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
-androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
-androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
-firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
-androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
-poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
+poi_ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 
-# ✅ Nueva librería agregada
-apriltag-java = { group = "edu.wpi.first.apriltag", name = "apriltag-java", version.ref = "apriltag" }
+androidx_navigation_runtime_android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
+androidx_navigation_compose_jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
 
+androidx_camera_view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
+androidx_camera_lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
+
+firebase_crashlytics_buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+
+apriltag_java = { group = "edu.wpi.first.apriltag", name = "apriltag-java", version.ref = "apriltag" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+android_application = { id = "com.android.application", version.ref = "agp" }
+kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+dagger_hilt_android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
