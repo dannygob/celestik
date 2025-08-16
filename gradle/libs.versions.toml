@@ -20,7 +20,7 @@ firebaseCrashlyticsBuildtools = "3.0.6"
 navigationComposeJvmstubs = "2.9.3"
 gson = "2.11.0"
 hilt-navigation-compose = "1.2.0" # Use the latest version
-
+apriltag = "2025.3.1" # ✅ Añadido
 
 
 [libraries]
@@ -54,6 +54,10 @@ androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
+
+# ✅ Nueva librería agregada
+apriltag-java = { group = "edu.wpi.first.apriltag", name = "apriltag-java", version.ref = "apriltag" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
