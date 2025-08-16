@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -82,7 +83,7 @@ dependencies {
     // Otros
     implementation(libs.litert)
     implementation(libs.androidx.navigation.runtime.android)
-    implementation(libs.hiltNavigationCompose)
+    //implementation(libs.androidx.hilt.navigation.compose) // Or whatever alias you defined
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.gson)
@@ -91,17 +92,23 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    implementation(libs.poi.ooxml)
+
+
 
     // Testing
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+//    testImplementation(libs.junit)
+//    androidTestImplementation(libs.androidx.junit)
+//    androidTestImplementation(libs.androidx.espresso.core)
+//    androidTestImplementation(platform(libs.androidx.compose.bom))
+//    androidTestImplementation(libs.androidx.ui.test.junit4)
 
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.github.zlite:apriltag-java:1.0.0")
+    implementation("androidx.navigation:navigation-compose:2.7.0")
     //implementation(project(":opencv"))
 }

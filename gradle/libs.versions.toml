@@ -8,8 +8,8 @@ espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
 composeBom = "2024.09.00"
-composeCompiler = "1.6.11"
 hilt = "2.57"
+poiOoxml = "5.4.1"
 roomCommonJvm = "2.7.2"
 roomRuntimeAndroid = "2.7.2"
 litert = "1.4.0"
@@ -19,6 +19,8 @@ cameraLifecycle = "1.4.2"
 firebaseCrashlyticsBuildtools = "3.0.6"
 navigationComposeJvmstubs = "2.9.3"
 gson = "2.11.0"
+hilt-navigation-compose = "1.2.0" # Use the latest version
+
 
 
 [libraries]
@@ -50,7 +52,8 @@ androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycl
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
 androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
