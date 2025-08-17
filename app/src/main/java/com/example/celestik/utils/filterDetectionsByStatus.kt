@@ -29,8 +29,8 @@ fun generatePdfFromDetections(
     detections: List<DetectionItem>,
     loteId: String,
 ): File {
-    // Puedes usar AndroidPdfDocument o PDFBox aquí (dependiendo de tu enfoque).
-    // Este es un placeholder.
+    // You can use AndroidPdfDocument or PDFBox here (depending on your approach).
+    // This is a placeholder.
     val dir = File(Environment.getExternalStorageDirectory(), "Celestic/Reports")
     if (!dir.exists()) dir.mkdirs()
     val file = File(dir, "ReporteCelestic_$loteId.pdf")

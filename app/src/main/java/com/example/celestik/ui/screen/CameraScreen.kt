@@ -27,7 +27,7 @@ fun CameraScreen(navController: NavController, aprilTagManager: AprilTagManager)
 
         Button(onClick = {
             Toast.makeText(context, stringResource(R.string.loading), Toast.LENGTH_SHORT).show()
-            // Acción: iniciar escaneo
+            // Action: start scanning
         }) {
             Text(stringResource(R.string.scan_button))
         }

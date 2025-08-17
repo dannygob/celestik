@@ -6,7 +6,7 @@ import org.opencv.core.Mat
 object ImageProcessor {
 
     fun processImage(frame: Mat): List<DetectionItem> {
-        // Lógica para procesar la imagen y detectar diferentes tipos de objetos
+        // Logic to process the image and detect different types of objects
         return emptyList()
     }
 }

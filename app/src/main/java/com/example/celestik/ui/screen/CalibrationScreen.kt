@@ -25,8 +25,8 @@ fun CalibrationScreen(navController: NavController) {
         )
 
         Button(onClick = {
-            Toast.makeText(context, "Calibrando...", Toast.LENGTH_SHORT).show()
-            // Acción de calibración manual
+            Toast.makeText(context, "Calibrating...", Toast.LENGTH_SHORT).show()
+            // Action of manual calibration
         }) {
             Text("Iniciar calibración")
         }

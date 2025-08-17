@@ -20,7 +20,7 @@ import com.example.celestik.ui.screen.SettingsScreen
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-    // Crear y recordar el AprilTagManager para detección de tags
+    // Create and remember the AprilTagManager for tag detection
     val aprilTagManager = remember { AprilTagManager().apply { init() } }
 
     NavHost(
@@ -36,7 +36,7 @@ fun NavigationGraph(navController: NavHostController) {
         }
 
         composable(NavigationRoutes.Camera.route) {
-            // Pasamos la instancia del detector al CameraScreen
+            // We pass the detector instance to the CameraScreen
             CameraScreen(navController, aprilTagManager)
         }
 
@@ -55,7 +55,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(NavigationRoutes.ReportDialog.route) {
             ReportRequestDialog(
                 onDismiss = { navController.popBackStack() },
-                onConfirm = { navController.popBackStack() } // lógica real si quieres enviar algo
+                onConfirm = { navController.popBackStack() } // real logic if you want to send something
             )
         }
 

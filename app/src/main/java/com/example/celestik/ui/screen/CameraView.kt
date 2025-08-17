@@ -100,7 +100,7 @@ private fun startCamera(
         }
 
         val imageAnalysis = ImageAnalysis.Builder()
-            .setTargetResolution(Size(224, 224)) // Tamaño del modelo
+            .setTargetResolution(Size(224, 224)) // Model size
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build().apply {
                 setAnalyzer(cameraExecutor) { imageProxy ->

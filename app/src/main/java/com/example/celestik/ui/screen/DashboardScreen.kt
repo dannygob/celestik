@@ -69,7 +69,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔧 Sección Configuración
+            // 🔧 Settings Section
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(
@@ -108,7 +108,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 🚀 Sección Modalidades de inspección
+            // 🚀 Inspection Modes Section
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(strings.analysisModes, style = MaterialTheme.typography.titleMedium)
@@ -144,7 +144,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 📊 Sección Historial y generación de reportes
+            // 📊 History and Report Generation Section
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(strings.reportsSection, style = MaterialTheme.typography.titleMedium)

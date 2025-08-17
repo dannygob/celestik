@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 /**
- * Representa una característica visual detectada en una imagen calibrada.
+ * Represents a visual feature detected in a calibrated image.
  */
 @Parcelize
 @Entity(tableName = "detected_features")
@@ -19,7 +19,7 @@ data class DetectedFeature(
     val detectionItemId: Long,
 
     @ColumnInfo(name = "feature_type")
-    val featureType: String, // Ej: "charuco_corner", "aruco_marker", "edge", etc.
+    val featureType: String, // Ex: "charuco_corner", "aruco_marker", "edge", etc.
 
     @ColumnInfo(name = "x_coord")
     val xCoord: Float,
@@ -28,7 +28,7 @@ data class DetectedFeature(
     val yCoord: Float,
 
     @ColumnInfo(name = "confidence")
-    val confidence: Float, // Valor de certeza de detección, 0.0–1.0
+    val confidence: Float, // Detection certainty value, 0.0 - 1.0
 
     @ColumnInfo(name = "timestamp")
     val timestamp: Long, // Epoch time en milisegundos

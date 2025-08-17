@@ -39,19 +39,19 @@ class AprilTagManager {
         }
     }
 
-    // Detector configurado con la familia tag36h11
+    // Detector configured with the tag36h11 family
     private val detector: AprilTagDetector = AprilTagDetector.Builder()
         .addFamily("tag36h11")
         .build()
 
-    // Simula init(), no es estrictamente necesario pero para mantener el patrón
+    // Simulates init(), not strictly necessary but to maintain the pattern
     fun init() {
-        // Aquí podrías hacer inicializaciones si fuera necesario
-        // La librería oficial no requiere init explícito aparte del Builder
+        // Here you could do initializations if necessary
+        // The official library does not require explicit init apart from the Builder
     }
 
     fun detectMarkers(image: Mat): List<Marker> {
-        // Convertir imagen a escala de grises si es necesario
+        // Convert image to grayscale if necessary
         val gray = Mat()
         if (image.channels() > 1) {
             Imgproc.cvtColor(image, gray, Imgproc.COLOR_BGR2GRAY)
@@ -59,17 +59,17 @@ class AprilTagManager {
             image.copyTo(gray)
         }
 
-        // Extraer bytes de la imagen gris
+        // Extract bytes from the gray image
         val width = gray.width()
         val height = gray.height()
         val grayBytes = ByteArray(width * height)
         gray.get(0, 0, grayBytes)
 
-        // Detectar los AprilTags usando la librería oficial
+        // Detect the AprilTags using the official library
         val detections: List<AprilTagDetection> =
             detector.detect(grayBytes, width, height) as List<AprilTagDetection>
 
-        // Mapear detecciones a Marker para mantener tu estructura
+        // Map detections to Marker to maintain your structure
         return detections.map { detection ->
             Marker(
                 id = detection.id,
@@ -82,6 +82,6 @@ class AprilTagManager {
     }
 
     fun close() {
-        detector.close()  // Liberar recursos cuando termines
+        detector.close()  // Release resources when finished
     }
 }
