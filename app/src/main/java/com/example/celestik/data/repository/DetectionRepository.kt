@@ -10,25 +10,29 @@ import kotlinx.coroutines.flow.Flow
 
 class DetectionRepository(private val dao: CelestikDao) {
 
-    suspend fun saveDetection(detection: DetectedFeature) {
+    suspend fun insertDetectedFeature(detection: DetectedFeature) {
         dao.insertDetection(detection)
     }
 
-    suspend fun saveDetections(detections: List<DetectedFeature>) {
+    suspend fun insertDetectedFeatures(detections: List<DetectedFeature>) {
         dao.insertDetections(detections)
     }
 
-    fun loadDetections(): Flow<List<DetectedFeature>> {
+    fun getAllDetectedFeatures(): Flow<List<DetectedFeature>> {
         return dao.getAllDetections()
     }
 
-    suspend fun clearAllDetections() {
+    suspend fun clearAllDetectedFeatures() {
         dao.clearDetections()
     }
 
-    suspend fun insertDetection(item: DetectionItem) = dao.insert(item)
+    suspend fun insertDetectionItem(item: DetectionItem) {
+        dao.insert(item)
+    }
 
-    suspend fun deleteDetection(item: DetectionItem) = dao.delete(item)
+    suspend fun deleteDetectionItem(item: DetectionItem) {
+        dao.delete(item)
+    }
 
     suspend fun insertCameraCalibrationData(cameraCalibrationData: CameraCalibrationData) {
         dao.insertCameraCalibrationData(cameraCalibrationData)
@@ -46,17 +50,16 @@ class DetectionRepository(private val dao: CelestikDao) {
         return dao.getReportConfig()
     }
 
-    fun getAll(): Flow<List<DetectionItem>> {
+    fun getAllDetectionItems(): Flow<List<DetectionItem>> {
         return dao.getAll()
     }
 
-    fun getFeaturesForDetection(detectionItemId: Long): Flow<List<DetectedFeature>> {
+    fun getFeaturesForDetectionItem(detectionItemId: Long): Flow<List<DetectedFeature>> {
         return dao.getFeaturesForDetection(detectionItemId)
     }
 
     suspend fun startInspection(): Long {
-        val inspection =
-            Inspection(timestamp = System.currentTimeMillis())
+        val inspection = Inspection(timestamp = System.currentTimeMillis())
         return dao.insertInspection(inspection)
     }
 
