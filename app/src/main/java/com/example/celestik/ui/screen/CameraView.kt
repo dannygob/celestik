@@ -1,6 +1,5 @@
 package com.example.celestik.ui.screen
 
-
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -25,13 +24,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.celestik.manager.ImageClassifier
 import com.example.celestik.utils.OpenCVInitializer
 import com.example.celestik.viewmodel.MainViewModel
-import org.opencv.android.Utils
-import org.opencv.core.CvType
-import org.opencv.core.Mat
-import org.opencv.imgproc.Imgproc
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
 
 @Composable
 fun CameraView(
@@ -50,9 +44,7 @@ fun CameraView(
         if (!permissionGranted) {
             Log.e("CameraView", "Permiso de cámara no concedido.")
         }
-    }
 
-    LaunchedEffect(Unit) {
         val success = OpenCVInitializer.initOpenCV(context)
         if (!success) Log.e("CameraView", "Error al inicializar OpenCV")
     }
@@ -100,7 +92,7 @@ private fun startCamera(
         }
 
         val imageAnalysis = ImageAnalysis.Builder()
-            .setTargetResolution(Size(224, 224)) // Model size
+            .setTargetResolution(Size(224, 224))
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
             .build().apply {
                 setAnalyzer(cameraExecutor) { imageProxy ->
@@ -110,7 +102,7 @@ private fun startCamera(
                         val predictions = classifier.runInference(bitmap)
                         val tipo = classifier.mapPredictionToFeatureType(predictions)
                         Log.d("Clasificación", "Resultado: $tipo")
-                        viewModel.setTipoClasificacion(tipo) // Puedes mostrarlo en UI si lo integras
+                        viewModel.setTipoClasificacion(tipo)
                     } catch (e: Exception) {
                         Log.e("Clasificador", "Error en inferencia", e)
                     } finally {
@@ -133,26 +125,4 @@ private fun startCamera(
             Log.e("CameraView", "Error al iniciar cámara", e)
         }
     }, ContextCompat.getMainExecutor(context))
-}
-
-private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
-    val plane = image.planes[0]
-    val buffer = plane.buffer
-    val bytes = ByteArray(buffer.remaining())
-    buffer.get(bytes)
-
-    val yuvMat = Mat(image.height + image.height / 2, image.width, CvType.CV_8UC1)
-    yuvMat.put(0, 0, bytes)
-
-    val rgbMat = Mat()
-    Imgproc.cvtColor(yuvMat, rgbMat, Imgproc.COLOR_YUV2RGB_NV21)
-
-    val bmp = Bitmap.createBitmap(rgbMat.cols(), rgbMat.rows(), Bitmap.Config.ARGB_8888)
-    Utils.matToBitmap(rgbMat, bmp)
-
-    yuvMat.release()
-    rgbMat.release()
-
-    return bmp
-
 }
