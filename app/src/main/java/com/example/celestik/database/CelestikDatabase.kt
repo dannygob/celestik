@@ -14,12 +14,19 @@ import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.models.report.ReportConfig
 
 @Database(
-    entities = [DetectionItem::class, DetectedFeature::class, CameraCalibrationData::class, ReportConfig::class, Inspection::class],
+    entities = [
+        DetectionItem::class,
+        DetectedFeature::class,
+        CameraCalibrationData::class,
+        ReportConfig::class,
+        Inspection::class
+    ],
     version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class CelestikDatabase : RoomDatabase() {
+
     abstract fun celestikDao(): CelestikDao
 
     companion object {
@@ -32,7 +39,9 @@ abstract class CelestikDatabase : RoomDatabase() {
                     context.applicationContext,
                     CelestikDatabase::class.java,
                     "celestik_database"
-                ).fallbackToDestructiveMigration(false).build()
+                )
+                    .fallbackToDestructiveMigration(false)
+                    .build()
                 INSTANCE = instance
                 instance
             }
