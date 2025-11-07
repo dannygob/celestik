@@ -2,6 +2,7 @@ package com.example.celestik.ui.preview
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.celestik.models.DetectionItem
 import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
@@ -10,6 +11,8 @@ import com.example.celestik.models.geometry.BoundingBox
 @Composable
 fun DetectionItemPreview() {
     val item = DetectionItem(
+        id = 1L,
+        inspectionId = 101L,
         frameId = "frame_007",
         type = DetectionType.COUNTERSINK,
         boundingBox = BoundingBox(12f, 34f, 56f, 78f),
@@ -18,10 +21,14 @@ fun DetectionItemPreview() {
         measurementMm = 4.2f,
         timestamp = System.currentTimeMillis(),
         linkedQrCode = "QR-L123",
-        notes = "Preview de prueba",
-        id = TODO(),
-        inspectionId = TODO()
+        notes = "Preview de prueba"
     )
 
-    Text(text = "⚙️ Preview: ${item.type} - ${item.measurementMm}mm - ${item.status}")
+    Text(text = "⚙️ Preview: ${item.type} - ${item.measurementMm} mm - ${item.status}")
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDetectionItemPreview() {
+    DetectionItemPreview()
 }
