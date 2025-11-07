@@ -1,14 +1,15 @@
 package com.example.celestik.utils
 
 import android.content.Context
-import android.graphics.pdf.PdfDocument
 import com.example.celestik.models.DetectionItem
+import com.google.gson.Gson
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.File
 import java.io.FileOutputStream
+import java.io.FileWriter
 
 fun generatePdfFromDetections(
     context: Context,
@@ -17,7 +18,7 @@ fun generatePdfFromDetections(
 ): File {
     val file = File(context.getExternalFilesDir(null), "ReporteCelestic_$loteId.pdf")
     val writer = PdfWriter(file)
-    val pdf = PdfDocument(writer)
+    val pdf = com.itextpdf.kernel.pdf.PdfDocument(writer)
     val document = Document(pdf)
 
     document.add(Paragraph("Reporte de Detecciones - Lote: $loteId"))
@@ -40,11 +41,10 @@ fun generateCsvFromDetections(
 ): File {
     val file = File(context.getExternalFilesDir(null), "ReporteCelestic_$loteId.csv")
     val writer = file.bufferedWriter()
-    writer.write("ID,Tipo,Confianza,Status,Ancho (mm),Alto (mm)\n")
+    writer.write("ID,Tipo,Confianza,Status,Medida (mm)\n")
     detections.forEach {
-        val width = it.measurementMm
-        val height = it.measurementMm
-        writer.write("${it.id},${it.type},${it.confidence},${it.status},${width ?: ""},${height ?: ""}\n")
+        val measurement = it.measurementMm ?: ""
+        writer.write("${it.id},${it.type},${it.confidence},${it.status},$measurement\n")
     }
     writer.close()
     return file
@@ -77,7 +77,11 @@ fun generateWordFromDetections(
     return file
 }
 
-fun exportJsonSummary(context: Context, detections: List<DetectionItem>, loteId: String): File? {
+fun exportJsonSummary(
+    context: Context,
+    detections: List<DetectionItem>,
+    loteId: String
+): File {
     val gson = Gson()
     val json = gson.toJson(detections)
     val file = File(context.getExternalFilesDir(null), "ReporteCelestic_$loteId.json")
