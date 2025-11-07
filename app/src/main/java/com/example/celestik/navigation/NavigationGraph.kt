@@ -3,31 +3,23 @@ package com.example.celestik.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.navigation.NavType
 import com.example.celestik.manager.AprilTagManager
-import com.example.celestik.ui.screen.CalibrationScreen
-import com.example.celestik.ui.screen.CameraScreen
-import com.example.celestik.ui.screen.DashboardScreen
-import com.example.celestik.ui.screen.DetailsScreen
-import com.example.celestik.ui.screen.DetectionListScreen
-import com.example.celestik.ui.screen.InspectionPreviewScreen
-import com.example.celestik.ui.screen.LoginScreen
-import com.example.celestik.ui.screen.ReportRequestDialog
-import com.example.celestik.ui.screen.SettingsScreen
+import com.example.celestik.ui.screen.*
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-    // Create and remember the AprilTagManager for tag detection
+    // Instancia del detector de AprilTags
     val aprilTagManager = remember { AprilTagManager().apply { init() } }
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = NavigationRoutes.Login.route
     ) {
-        composable("login") {
+        composable(NavigationRoutes.Login.route) {
             LoginScreen(navController)
         }
 
@@ -36,7 +28,6 @@ fun NavigationGraph(navController: NavHostController) {
         }
 
         composable(NavigationRoutes.Camera.route) {
-            // We pass the detector instance to the CameraScreen
             CameraScreen(navController, aprilTagManager)
         }
 
@@ -55,7 +46,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(NavigationRoutes.ReportDialog.route) {
             ReportRequestDialog(
                 onDismiss = { navController.popBackStack() },
-                onConfirm = { navController.popBackStack() } // real logic if you want to send something
+                onConfirm = { navController.popBackStack() } // lógica real si se desea enviar algo
             )
         }
 
@@ -63,12 +54,16 @@ fun NavigationGraph(navController: NavHostController) {
             InspectionPreviewScreen(navController)
         }
 
-        composable("settings") {
+        composable(NavigationRoutes.Settings.route) {
             SettingsScreen(navController)
         }
 
-        composable("detection_list") {
+        composable(NavigationRoutes.DetectionList.route) {
             DetectionListScreen(navController)
+        }
+
+        composable("status") {
+            StatusScreen(navController)
         }
     }
 }
