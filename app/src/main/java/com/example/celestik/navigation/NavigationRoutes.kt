@@ -21,4 +21,6 @@ sealed class NavigationRoutes(val route: String) {
     object Settings : NavigationRoutes("settings")
 
     object DetectionList : NavigationRoutes("detection_list")
+
+    object Status : NavigationRoutes("status")
 }
