@@ -10,11 +10,12 @@ enum class MarkerType {
 }
 
 class SharedViewModel : ViewModel() {
+
     private val _useInches = MutableStateFlow(false)
-    val useInches: StateFlow<Boolean> = _useInches
+    val useInches: StateFlow<Boolean> get() = _useInches
 
     private val _markerType = MutableStateFlow(MarkerType.ARUCO)
-    val markerType: StateFlow<MarkerType> = _markerType
+    val markerType: StateFlow<MarkerType> get() = _markerType
 
     fun setUseInches(useInches: Boolean) {
         _useInches.value = useInches
