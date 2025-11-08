@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+/**
+ * ViewModel for exposing the list of detections.
+ * Uses Hilt for dependency injection and wraps repository data in a Result<StateFlow>.
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: DetectionRepository,
