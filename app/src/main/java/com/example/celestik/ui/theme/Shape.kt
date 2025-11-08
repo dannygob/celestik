@@ -4,6 +4,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
 
+/**
+ * Defines the shape configuration for the app's Material 3 theme.
+ * Applies rounded corners to components of different sizes.
+ */
 val CelestikShapes = Shapes(
     small = RoundedCornerShape(4.dp),
     medium = RoundedCornerShape(8.dp),
