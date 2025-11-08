@@ -42,6 +42,13 @@ val detectionListErrorMessage: String = "❌ Error al cargar las detecciones."
 val confirmButtonLabel: String = "Aceptar"
     val logOpenCVSuccess: String = "OpenCV initialized successfully"
 val logOpenCVFailure: String = "OpenCV initialization failed"
+    val reportTitle: String = "Reporte de Detecciones - Lote: %s"
+val reportFieldId: String = "ID: %s"
+val reportFieldType: String = "Tipo: %s"
+val reportFieldConfidence: String = "Confianza: %s"
+val reportFieldStatus: String = "Status: %s"
+val reportSeparator: String = "--------------------"
+val reportCsvHeader: String = "ID,Tipo,Confianza,Status,Medida (mm)"
 
 )
 
