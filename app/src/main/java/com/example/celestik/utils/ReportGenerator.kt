@@ -2,6 +2,7 @@ package com.example.celestik.utils
 
 import android.content.Context
 import com.example.celestik.models.DetectionItem
+import com.example.celestik.models.enums.DetectionStatus
 import com.google.gson.Gson
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
@@ -12,18 +13,24 @@ import java.io.FileOutputStream
 import java.io.FileWriter
 
 /**
- * Provides functions to export detection data into PDF, CSV, Word, and JSON formats.
- * All labels are currently hardcoded in Spanish and should be localized via LocalizedStrings.
+ * Provides utilities to generate and export detection reports in multiple formats.
  */
 object ReportGenerator {
 
     /**
-     * Generates a PDF report from a list of detections.
+     * Filters a list of detections by a specific status.
      *
-     * @param context Application context.
-     * @param detections List of DetectionItem to include.
-     * @param loteId Identifier for the batch.
-     * @return File object pointing to the generated PDF.
+     * @param detections List of DetectionItem to filter.
+     * @param status DetectionStatus to match.
+     * @return Filtered list of DetectionItem.
+     */
+    fun filterDetectionsByStatus(
+        detections: List<DetectionItem>,
+        status: DetectionStatus,
+    ): List<DetectionItem> = detections.filter { it.status == status }
+
+    /**
+     * Generates a PDF report from a list of detections.
      */
     fun generatePdfFromDetections(
         context: Context,
@@ -50,11 +57,6 @@ object ReportGenerator {
 
     /**
      * Generates a CSV report from a list of detections.
-     *
-     * @param context Application context.
-     * @param detections List of DetectionItem to include.
-     * @param loteId Identifier for the batch.
-     * @return File object pointing to the generated CSV.
      */
     fun generateCsvFromDetections(
         context: Context,
@@ -74,11 +76,6 @@ object ReportGenerator {
 
     /**
      * Generates a Word report from a list of detections.
-     *
-     * @param context Application context.
-     * @param detections List of DetectionItem to include.
-     * @param loteId Identifier for the batch.
-     * @return File object pointing to the generated DOCX.
      */
     fun generateWordFromDetections(
         context: Context,
@@ -109,11 +106,6 @@ object ReportGenerator {
 
     /**
      * Exports a JSON summary of the detections.
-     *
-     * @param context Application context.
-     * @param detections List of DetectionItem to include.
-     * @param loteId Identifier for the batch.
-     * @return File object pointing to the generated JSON.
      */
     fun exportJsonSummary(
         context: Context,
