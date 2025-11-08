@@ -8,6 +8,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
+/**
+ * Placeholder screen for displaying detection details.
+ * Currently only shows the detection ID.
+ *
+ * @param navController Navigation controller for routing.
+ * @param detectionId Optional ID of the detection to display.
+ */
 @Composable
 fun DetectionDetailsScreen(navController: NavController, detectionId: String?) {
     Box(
