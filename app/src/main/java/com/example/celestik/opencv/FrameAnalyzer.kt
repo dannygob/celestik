@@ -7,21 +7,24 @@ import com.example.celestik.manager.ArUcoManager
 import com.example.celestik.viewmodel.MarkerType
 import com.example.celestik.viewmodel.SharedViewModel
 import org.opencv.aruco.Aruco
-import org.opencv.core.CvType
-import org.opencv.core.Mat
-import org.opencv.core.MatOfByte
-import org.opencv.core.MatOfFloat
-import org.opencv.core.MatOfPoint
-import org.opencv.core.MatOfPoint2f
-import org.opencv.core.Point
-import org.opencv.core.Scalar
+import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import org.opencv.video.Video
 
+/**
+ * Performs image analysis using OpenCV, including marker detection,
+ * contour extraction, deformation analysis, and optical flow tracking.
+ */
 class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
+    /**
+     * Represents a detected marker with its ID and corner matrix.
+     */
     data class Marker(val id: Int, val corners: Mat)
 
+    /**
+     * Encapsulates the result of a frame analysis.
+     */
     data class AnalysisResult(
         val contours: List<MatOfPoint>,
         val annotatedMat: Mat,
@@ -42,16 +45,15 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return mat
     }
 
+    /**
+     * Main analysis function that processes a frame and returns results.
+     */
     fun analyze(mat: Mat): AnalysisResult {
         val grayMat = Mat()
-        val thresholdedImage = Mat()
         val edges = Mat()
-        mutableListOf<MatOfPoint>()
-        mutableListOf<MatOfPoint>()
-        Mat()
 
         try {
-            // Preprocesamiento
+            // Preprocessing
             Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY)
             Imgproc.GaussianBlur(grayMat, grayMat, Size(5.0, 5.0), 0.0)
 
@@ -61,24 +63,18 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
             val filteredContours = filterContours(contours, 100.0)
             val deformations = detectDeformations(filteredContours)
             val holes = detectHoles(grayMat)
-            // val template = Utils.loadResource(context, R.drawable.countersink_template)
-            // detectCountersinks(grayMat, template)
+
+            // Optical flow deformation tracking
             prevGrayMat?.let { detectDeformationsWithOpticalFlow(it, grayMat) }
             prevGrayMat = grayMat.clone()
-            // val scale = calibrationManager.getScaleFactor(1.0)
-            // calculateMeasurements(filteredContours, scale)
 
-            // Detección de marcadores
+            // Marker detection
             val markers = when (sharedViewModel.markerType.value) {
-                MarkerType.ARUCO -> arucoManager.detectMarkers(mat)
-                    .map { Marker(it.id, it.corners) }
-
-                MarkerType.APRILTAG -> aprilTagManager.detectMarkers(mat)
-                    .map { Marker(it.id, cornersToMat(it.corners)) }
+                MarkerType.ARUCO -> arucoManager.detectMarkers(mat).map { Marker(it.id, it.corners) }
+                MarkerType.APRILTAG -> aprilTagManager.detectMarkers(mat).map { Marker(it.id, cornersToMat(it.corners)) }
             }
 
-
-            // Dibujar resultados en una copia
+            // Annotate result
             val annotatedMat = mat.clone()
             Imgproc.drawContours(annotatedMat, filteredContours, -1, Scalar(0.0, 255.0, 0.0), 2)
             Imgproc.drawContours(annotatedMat, deformations, -1, Scalar(255.0, 0.0, 0.0), 2)
@@ -88,20 +84,18 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
                 val radius = circle[2].toInt()
                 Imgproc.circle(annotatedMat, center, radius, Scalar(0.0, 0.0, 255.0), 2)
             }
-            // TODO: Draw countersinks
+
             if (markers.isNotEmpty()) {
                 Aruco.drawDetectedMarkers(annotatedMat, markers.map { it.corners }, Mat())
             }
 
-
             return AnalysisResult(contours, annotatedMat, markers)
 
         } catch (e: Exception) {
-            Log.e("FrameAnalyzer", "Error al analizar frame", e)
+            Log.e("FrameAnalyzer", "Error analyzing frame", e)
             return AnalysisResult(emptyList(), mat, emptyList())
         } finally {
             grayMat.release()
-            thresholdedImage.release()
             edges.release()
         }
     }
