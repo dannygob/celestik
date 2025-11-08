@@ -40,6 +40,8 @@ val inspectionPreviewButton: String = "Ver componentes"
 val detectionDetailsLabel: String = "Detalles para la detección: %s"
 val detectionListErrorMessage: String = "❌ Error al cargar las detecciones."
 val confirmButtonLabel: String = "Aceptar"
+    val logOpenCVSuccess: String = "OpenCV initialized successfully"
+val logOpenCVFailure: String = "OpenCV initialization failed"
 
 )
 
