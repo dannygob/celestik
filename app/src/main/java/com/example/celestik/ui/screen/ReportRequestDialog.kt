@@ -6,6 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 
+/**
+ * Displays a confirmation dialog for report generation.
+ * Shows a toast and triggers callback on confirmation.
+ *
+ * @param onDismiss Callback when the dialog is dismissed.
+ * @param onConfirm Callback when the user confirms the report request.
+ */
 @Composable
 fun ReportRequestDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     val context = LocalContext.current
@@ -16,7 +23,7 @@ fun ReportRequestDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
         text = { Text(text = stringResource(R.string.loading)) },
         confirmButton = {
             Button(onClick = {
-                Toast.makeText(context, "Solicitando reporte...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, stringResource(R.string.toastReportRequest), Toast.LENGTH_SHORT).show()
                 onConfirm()
             }) {
                 Text("OK")
