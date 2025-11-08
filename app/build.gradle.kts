@@ -80,6 +80,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.transportation.consumer)
     implementation(libs.room.external.antlr)
+    implementation(libs.androidx.runtime)
+    implementation(libs.firebase.auth.ktx)
     kapt(libs.hilt.android.compiler)
 
     // AprilTag

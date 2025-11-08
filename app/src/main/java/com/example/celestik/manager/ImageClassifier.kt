@@ -9,6 +9,7 @@ import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
+import androidx.core.graphics.get
 
 /**
  * ImageClassifier loads a TFLite model and performs inference on input Bitmaps.
@@ -55,7 +56,7 @@ class ImageClassifier(context: Context) {
 
         for (y in 0 until INPUT_IMAGE_SIZE) {
             for (x in 0 until INPUT_IMAGE_SIZE) {
-                val pixel = resizedBitmap.getPixel(x, y)
+                val pixel = resizedBitmap[x, y]
                 val r = ((pixel shr 16) and 0xFF) / 255f
                 val g = ((pixel shr 8) and 0xFF) / 255f
                 val b = (pixel and 0xFF) / 255f

@@ -5,6 +5,7 @@ import edu.wpi.first.apriltag.AprilTagDetector
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 
+
 /**
  * AprilTagManager handles detection of AprilTags using WPILib and OpenCV.
  * It wraps the native detector and exposes structured results.
@@ -71,7 +72,7 @@ class AprilTagManager {
         // Extract bytes from the grayscale image
         val width = gray.width()
         val height = gray.height()
-        val grayBytes = ByteArray(width * height)
+        val grayBytes: Mat? = ByteArray(width * height)
         gray.get(0, 0, grayBytes)
 
         // Detect AprilTags using the native detector

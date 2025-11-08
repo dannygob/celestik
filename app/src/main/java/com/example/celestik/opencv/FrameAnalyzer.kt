@@ -208,7 +208,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
     /** Tracks motion between frames using optical flow. */
     fun detectDeformationsWithOpticalFlow(prevFrame: Mat, nextFrame: Mat): MatOfPoint2f {
-        val prevPts = MatOfPoint2f()
+        val prevPts: MatOfPoint2f = MatOfPoint2f()
         Imgproc.goodFeaturesToTrack(prevFrame, prevPts, 100, 0.3, 7.0)
         val nextPts = MatOfPoint2f()
         val status = MatOfByte()

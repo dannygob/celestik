@@ -36,7 +36,7 @@ fun DetectionListScreen(
             }
 
             is Result.Success -> {
-                val detections = (detectionsResult as Result.Success).data
+                val detections = (detectionsResult as Result.Success<*>).data
                 items(detections) { item ->
                     DetectionItemCard(item = item)
                 }
