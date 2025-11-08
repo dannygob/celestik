@@ -10,9 +10,13 @@ import androidx.navigation.NavType
 import com.example.celestik.manager.AprilTagManager
 import com.example.celestik.ui.screen.*
 
+/**
+ * Defines the navigation graph for the Celestik app.
+ * Maps route constants to screen composables and injects dependencies as needed.
+ */
 @Composable
 fun NavigationGraph(navController: NavHostController) {
-    // Instancia del detector de AprilTags
+    // Instance of AprilTag detector used in CameraScreen
     val aprilTagManager = remember { AprilTagManager().apply { init() } }
 
     NavHost(
@@ -46,7 +50,7 @@ fun NavigationGraph(navController: NavHostController) {
         composable(NavigationRoutes.ReportDialog.route) {
             ReportRequestDialog(
                 onDismiss = { navController.popBackStack() },
-                onConfirm = { navController.popBackStack() } // lógica real si se desea enviar algo
+                onConfirm = { navController.popBackStack() } // Replace with actual submission logic if needed
             )
         }
 
@@ -62,7 +66,7 @@ fun NavigationGraph(navController: NavHostController) {
             DetectionListScreen(navController)
         }
 
-        composable("status") {
+        composable(NavigationRoutes.Status.route) {
             StatusScreen(navController)
         }
     }
