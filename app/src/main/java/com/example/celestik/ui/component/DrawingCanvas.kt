@@ -10,6 +10,12 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.celestik.models.calibration.DetectedFeature
 
+/**
+ * Renders a canvas displaying detected features as red circles.
+ * This is a simplified visualization without annotations or dimensional labels.
+ *
+ * @param features List of detected features with spatial coordinates.
+ */
 @Composable
 fun DrawingCanvas(features: List<DetectedFeature>) {
     Canvas(modifier = Modifier.fillMaxSize()) {
