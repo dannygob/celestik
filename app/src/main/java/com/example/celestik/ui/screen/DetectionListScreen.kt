@@ -12,6 +12,13 @@ import com.example.celestik.ui.component.ShimmerDetectionItemCard
 import com.example.celestik.utils.Result
 import com.example.celestik.viewmodel.MainViewModel
 
+/**
+ * Displays a scrollable list of detection items.
+ * Shows shimmer placeholders while loading and renders cards on success.
+ *
+ * @param navController Navigation controller for routing.
+ * @param viewModel ViewModel providing detection data.
+ */
 @Composable
 fun DetectionListScreen(
     navController: NavController,
@@ -35,7 +42,10 @@ fun DetectionListScreen(
             }
 
             is Result.Error -> {
-                // TODO: Handle error
+                item {
+                    Text("❌ Failed to load detections.")
+                    // TODO: Add retry button or error visuals
+                }
             }
         }
     }
