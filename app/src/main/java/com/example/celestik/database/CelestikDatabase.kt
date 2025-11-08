@@ -52,7 +52,7 @@ abstract class CelestikDatabase : RoomDatabase() {
                     "celestik_database"
                 )
                     // WARNING: This will wipe data if migration is missing.
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = instance
                 instance

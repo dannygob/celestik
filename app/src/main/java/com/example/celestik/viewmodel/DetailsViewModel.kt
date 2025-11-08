@@ -7,7 +7,7 @@ import com.example.celestik.data.repository.DetectionRepository
 import com.example.celestik.models.TraceabilityItem
 import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.utils.Result
-import com.example.celestik.utils.loadTractabilityFromJson
+import com.example.celestik.utils.loadTraceabilityFromJson
 import com.example.celestik.utils.searchForCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

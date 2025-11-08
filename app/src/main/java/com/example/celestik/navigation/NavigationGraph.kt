@@ -1,14 +1,23 @@
 package com.example.celestik.navigation
 
+import DashboardScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import androidx.navigation.NavType
 import com.example.celestik.manager.AprilTagManager
-import com.example.celestik.ui.screen.*
+import com.example.celestik.ui.screen.CalibrationScreen
+import com.example.celestik.ui.screen.CameraScreen
+import com.example.celestik.ui.screen.DetailsScreen
+import com.example.celestik.ui.screen.DetectionListScreen
+import com.example.celestik.ui.screen.InspectionPreviewScreen
+import com.example.celestik.ui.screen.LoginScreen
+import com.example.celestik.ui.screen.ReportRequestDialog
+import com.example.celestik.ui.screen.SettingsScreen
+import com.example.celestik.ui.screen.StatusScreen
 
 /**
  * Defines the navigation graph for the Celestik app.
