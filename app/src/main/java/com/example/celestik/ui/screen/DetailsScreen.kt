@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.celestik.models.DetectionItem
@@ -18,6 +19,8 @@ import com.example.celestik.ui.component.BlueprintView
 import com.example.celestik.utils.Result
 import com.example.celestik.viewmodel.DetailsViewModel
 import com.example.celestik.viewmodel.SharedViewModel
+import com.google.type.Date
+
 /**
  * Displays detailed information about a detection item, including visual features and traceability.
  *
