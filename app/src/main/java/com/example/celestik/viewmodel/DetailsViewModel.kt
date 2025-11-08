@@ -25,12 +25,10 @@ class DetailsViewModel @Inject constructor(
     private val _traceabilityItem = MutableStateFlow<Result<TraceabilityItem?>>(Result.Loading)
     val traceabilityItem: StateFlow<Result<TraceabilityItem?>> = _traceabilityItem
 
-    private val _features =
-        MutableStateFlow<List<DetectedFeature>>(emptyList())
-    val features: StateFlow<List<DetectedFeature>> =
-        _features
+    private val _features = MutableStateFlow<List<DetectedFeature>>(emptyList())
+    val features: StateFlow<List<DetectedFeature>> = _features
 
-    fun loadTrazabilidad(codigo: String) {
+    fun loadTraceability(codigo: String) {
         viewModelScope.launch {
             try {
                 val lista = loadTractabilityFromJson(context)
@@ -43,9 +41,9 @@ class DetailsViewModel @Inject constructor(
 
     fun loadFeatures(detectionItemId: Long) {
         viewModelScope.launch {
-            repository.getFeaturesForDetection(detectionItemId).collect {
-                _features.value = it
-            }
+            repository.getFeaturesForDetection(detectionItemId)
+                .catch { e -> _features.value = emptyList() }
+                .collect { _features.value = it }
         }
     }
 }
