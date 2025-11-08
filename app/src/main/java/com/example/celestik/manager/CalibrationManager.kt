@@ -15,8 +15,8 @@ import java.util.Date
 import javax.inject.Inject
 
 /**
- * CalibrationManager handles camera calibration using Charuco boards and OpenCV.
- * It loads/saves calibration data and computes scale factors and matrices.
+ * Manages camera calibration using Charuco boards and OpenCV.
+ * Loads and saves calibration data, and computes scale factors and matrices.
  */
 class CalibrationManager @Inject constructor(private val context: Context) {
 
@@ -34,7 +34,7 @@ class CalibrationManager @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Loads calibration data from JSON file.
+     * Loads calibration data from a JSON file.
      */
     private fun loadCalibration(): Boolean {
         return try {
@@ -133,7 +133,7 @@ class CalibrationManager @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Saves calibration data to JSON file.
+     * Saves calibration data to a JSON file.
      */
     fun saveCalibrationToJson(
         cameraMatrix: Mat,
