@@ -12,12 +12,18 @@ import androidx.navigation.NavController
 import com.example.celestik.viewmodel.MarkerType
 import com.example.celestik.viewmodel.SharedViewModel
 
+/**
+ * Displays the settings screen with toggles for theme, unit system, and marker type.
+ *
+ * @param navController Navigation controller for routing.
+ * @param viewModel SharedViewModel providing app-wide settings.
+ */
 @Composable
 fun SettingsScreen(
     navController: NavController,
     viewModel: SharedViewModel = hiltViewModel(),
 ) {
-    var isDarkTheme by remember { mutableStateOf(false) }
+    var isDarkTheme by remember { mutableStateOf(false) } // TODO: Connect to actual theme system
     val useInches by viewModel.useInches.collectAsState()
     val markerType by viewModel.markerType.collectAsState()
 
@@ -52,7 +58,7 @@ fun SettingsScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("AprilTag Detection")
+            Text("Detection Marker: ${if (markerType == MarkerType.APRILTAG) "AprilTag" else "ArUco"}")
             Spacer(modifier = Modifier.weight(1f))
             Switch(
                 checked = markerType == MarkerType.APRILTAG,
