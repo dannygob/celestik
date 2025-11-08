@@ -5,14 +5,21 @@ import edu.wpi.first.apriltag.AprilTagDetector
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 
+/**
+ * AprilTagManager handles detection of AprilTags using WPILib and OpenCV.
+ * It wraps the native detector and exposes structured results.
+ */
 class AprilTagManager {
 
+    /**
+     * Represents a detected AprilTag marker with metadata and geometry.
+     */
     data class Marker(
-        val id: Int,
-        val hamming: Int,
-        val decisionMargin: Float,
-        val center: DoubleArray,
-        val corners: DoubleArray,
+        val id: Int,                      // Unique tag ID
+        val hamming: Int,                // Hamming error correction level
+        val decisionMargin: Float,       // Confidence score
+        val center: DoubleArray,         // [x, y] center coordinates
+        val corners: DoubleArray         // Flattened array of corner points
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -20,13 +27,11 @@ class AprilTagManager {
 
             other as Marker
 
-            if (id != other.id) return false
-            if (hamming != other.hamming) return false
-            if (decisionMargin != other.decisionMargin) return false
-            if (!center.contentEquals(other.center)) return false
-            if (!corners.contentEquals(other.corners)) return false
-
-            return true
+            return id == other.id &&
+                hamming == other.hamming &&
+                decisionMargin == other.decisionMargin &&
+                center.contentEquals(other.center) &&
+                corners.contentEquals(other.corners)
         }
 
         override fun hashCode(): Int {
@@ -44,12 +49,16 @@ class AprilTagManager {
         .addFamily("tag36h11")
         .build()
 
-    // Simulates init(), not strictly necessary but to maintain the pattern
+    /**
+     * Optional initialization hook for future setup logic.
+     */
     fun init() {
-        // Here you could do initializations if necessary
-        // The official library does not require explicit init apart from the Builder
+        // Placeholder for future initialization logic (e.g., logging, configuration)
     }
 
+    /**
+     * Detects AprilTags in the given image and returns a list of structured markers.
+     */
     fun detectMarkers(image: Mat): List<Marker> {
         // Convert image to grayscale if necessary
         val gray = Mat()
@@ -59,17 +68,17 @@ class AprilTagManager {
             image.copyTo(gray)
         }
 
-        // Extract bytes from the gray image
+        // Extract bytes from the grayscale image
         val width = gray.width()
         val height = gray.height()
         val grayBytes = ByteArray(width * height)
         gray.get(0, 0, grayBytes)
 
-        // Detect the AprilTags using the official library
-        val detections: List<AprilTagDetection> =
-            detector.detect(grayBytes, width, height) as List<AprilTagDetection>
+        // Detect AprilTags using the native detector
+        val detections = detector.detect(grayBytes, width, height)
+            .filterIsInstance<AprilTagDetection>()
 
-        // Map detections to Marker to maintain your structure
+        // Map detections to Marker objects
         return detections.map { detection ->
             Marker(
                 id = detection.id,
@@ -81,7 +90,11 @@ class AprilTagManager {
         }
     }
 
+    /**
+     * Releases native resources held by the detector.
+     * Should be called when the manager is no longer needed.
+     */
     fun close() {
-        detector.close()  // Release resources when finished
+        detector.close()
     }
 }
