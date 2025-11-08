@@ -16,6 +16,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel for loading traceability data and detected features.
+ * Uses Hilt for dependency injection and exposes state via StateFlow.
+ */
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val repository: DetectionRepository,
@@ -31,7 +35,7 @@ class DetailsViewModel @Inject constructor(
     fun loadTraceability(codigo: String) {
         viewModelScope.launch {
             try {
-                val lista = loadTractabilityFromJson(context)
+                val lista = loadTraceabilityFromJson(context) // ✅ corrected name
                 _traceabilityItem.value = Result.Success(searchForCode(codigo, lista))
             } catch (e: Exception) {
                 _traceabilityItem.value = Result.Error(e)
@@ -42,7 +46,7 @@ class DetailsViewModel @Inject constructor(
     fun loadFeatures(detectionItemId: Long) {
         viewModelScope.launch {
             repository.getFeaturesForDetection(detectionItemId)
-                .catch { e -> _features.value = emptyList() }
+                .catch { e -> _features.value = emptyList() } // TODO: log error or emit Result.Error
                 .collect { _features.value = it }
         }
     }
