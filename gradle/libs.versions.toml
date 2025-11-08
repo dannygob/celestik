@@ -1,5 +1,8 @@
 [versions]
 agp = "8.13.0"
+cameraCore = "1.5.1"
+cameraLifecycleVersion = "1.3.0"
+cameraViewVersion = "1.3.0"
 kotlin = "2.2.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
@@ -9,6 +12,7 @@ lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.11.0"
 composeBom = "2025.11.00"
 hilt = "2.57.2"
+navigationCompose = "2.9.6"
 poiOoxml = "5.4.1"
 roomCommonJvm = "2.8.3"
 roomRuntimeAndroid = "2.8.3"
@@ -23,11 +27,19 @@ composeCompiler = "2.2.21"
 material3 = "1.4.0"
 protoliteWellKnownTypes = "18.0.1"
 firebaseAuthKtx = "24.0.1"
+shimmer = "0.5.0"
 uiText = "1.9.4"
 transportationConsumer = "4.0.0"
+roomExternalAntlr = "2.8.3"
 
 [libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraLifecycleVersion" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraCore" }
+androidx-camera-extensions = { module = "androidx.camera:camera-extensions", version.ref = "cameraLifecycleVersion" }
+androidx-camera-view-v130 = { module = "androidx.camera:camera-view", version.ref = "cameraViewVersion" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx_core_ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+camera-lifecycle-v130 = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraLifecycleVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx_junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx_espresso_core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -42,7 +54,7 @@ androidx_ui_test_manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx_ui_test_junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx_material3 = { group = "androidx.compose.material3", name = "material3" }
 
-androidx_hilt_navigation_compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
+androidx_hilt_navigation_compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.3.0" }
 hilt_android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt_android_compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 
@@ -64,8 +76,10 @@ apriltag_java = { group = "edu.wpi.first.apriltag", name = "apriltag-java", vers
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 protolite-well-known-types = { group = "com.google.firebase", name = "protolite-well-known-types", version.ref = "protoliteWellKnownTypes" }
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmer" }
 ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 transportation-consumer = { group = "com.google.android.libraries.mapsplatform.transportation", name = "transportation-consumer", version.ref = "transportationConsumer" }
+room-external-antlr = { group = "androidx.room", name = "room-external-antlr", version.ref = "roomExternalAntlr" }
 
 [plugins]
 android_application = { id = "com.android.application", version.ref = "agp" }

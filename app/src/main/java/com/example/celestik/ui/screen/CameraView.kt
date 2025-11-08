@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.celestik.utils.OpenCVInitializer
+import com.example.celestik.opencv.OpenCVInitializer
 import com.example.celestik.viewmodel.MainViewModel
 import java.util.concurrent.Executors
 import java.util.jar.Manifest

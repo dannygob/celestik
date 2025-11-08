@@ -12,6 +12,7 @@ import org.opencv.android.Utils
 import org.opencv.core.CvType
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
+import androidx.core.graphics.createBitmap
 
 /**
  * Converts an ImageProxy (YUV format) to a Bitmap using OpenCV.
@@ -33,7 +34,7 @@ fun imageProxyToBitmap(image: ImageProxy): Bitmap {
     val rgbMat = Mat()
     Imgproc.cvtColor(yuvMat, rgbMat, Imgproc.COLOR_YUV2RGB_NV21)
 
-    val bmp = Bitmap.createBitmap(rgbMat.cols(), rgbMat.rows(), Bitmap.Config.ARGB_8888)
+    val bmp = createBitmap(rgbMat.cols(), rgbMat.rows())
     Utils.matToBitmap(rgbMat, bmp)
 
     yuvMat.release()

@@ -3,6 +3,7 @@ package com.example.celestik.manager
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.scale
+import androidx.room.jarjarred.org.antlr.v4.gui.Interpreter
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.ByteBuffer

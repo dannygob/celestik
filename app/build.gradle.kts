@@ -32,12 +32,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
         languageVersion = "1.9"
     }
 
@@ -45,7 +45,9 @@ android {
         compose = true
     }
 }
-
+kotlin {
+    jvmToolchain(17)
+}
 dependencies {
     // Core
     implementation(libs.androidx.core.ktx)
@@ -71,16 +73,17 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.gson)
     implementation(libs.poi.ooxml)
-    implementation("com.facebook.shimmer:shimmer:0.5.0")
-    implementation("androidx.navigation:navigation-compose:2.9.3")
+    implementation(libs.shimmer)
+    implementation(libs.androidx.navigation.compose)
 
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.transportation.consumer)
+    implementation(libs.room.external.antlr)
     kapt(libs.hilt.android.compiler)
 
     // AprilTag
-    implementation("edu.wpi.first.apriltag:apriltag-java:2025.3.1")
+    implementation(libs.apriltag.java)
     implementation(project(":openCv")) // <- solo si lo necesitas en el futuro
 
     // Testing
@@ -94,9 +97,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation("androidx.camera:camera-core:1.3.0")
-    implementation("androidx.camera:camera-camera2:1.3.0")
-    implementation("androidx.camera:camera-lifecycle:1.3.0")
-    implementation("androidx.camera:camera-view:1.3.0")
-    implementation("androidx.camera:camera-extensions:1.3.0")
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.camera.lifecycle.v130)
+    implementation(libs.androidx.camera.view.v130)
+    implementation(libs.androidx.camera.extensions)
 }

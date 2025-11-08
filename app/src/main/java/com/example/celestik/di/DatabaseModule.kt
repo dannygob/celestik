@@ -32,6 +32,6 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideCelestikDao(database: CelestikDatabase): CelestikDao {
-        return database.celestikDao()
+        return database.CelestikDao()
     }
 }
