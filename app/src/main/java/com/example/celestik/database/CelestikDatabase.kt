@@ -13,6 +13,10 @@ import com.example.celestik.models.calibration.CameraCalibrationData
 import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.models.report.ReportConfig
 
+/**
+ * CelestikDatabase defines the Room database configuration.
+ * It registers all entities and provides access to the DAO.
+ */
 @Database(
     entities = [
         DetectionItem::class,
@@ -27,12 +31,19 @@ import com.example.celestik.models.report.ReportConfig
 @TypeConverters(Converters::class)
 abstract class CelestikDatabase : RoomDatabase() {
 
+    /**
+     * Exposes the DAO for performing database operations.
+     */
     abstract fun celestikDao(): CelestikDao
 
     companion object {
         @Volatile
         private var INSTANCE: CelestikDatabase? = null
 
+        /**
+         * Returns the singleton instance of the database.
+         * Uses synchronized block for thread safety.
+         */
         fun getDatabase(context: Context): CelestikDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -40,7 +51,8 @@ abstract class CelestikDatabase : RoomDatabase() {
                     CelestikDatabase::class.java,
                     "celestik_database"
                 )
-                    .fallbackToDestructiveMigration(false)
+                    // WARNING: This will wipe data if migration is missing.
+                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance
