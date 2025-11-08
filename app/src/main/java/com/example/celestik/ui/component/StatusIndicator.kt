@@ -10,6 +10,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+/**
+ * Displays a circular status indicator.
+ * Green if active, red if inactive.
+ *
+ * @param isActive Whether the status is active (true = green, false = red).
+ */
 @Composable
 fun StatusIndicator(isActive: Boolean) {
     val color = if (isActive) Color(0xFF4CAF50) else Color(0xFFF44336)
