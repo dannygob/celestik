@@ -76,11 +76,12 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
+    implementation(libs.transportation.consumer)
     kapt(libs.hilt.android.compiler)
 
     // AprilTag
     implementation("edu.wpi.first.apriltag:apriltag-java:2025.3.1")
-    // implementation(project(":opencv")) // <- solo si lo necesitas en el futuro
+    implementation(project(":openCv")) // <- solo si lo necesitas en el futuro
 
     // Testing
     testImplementation(libs.junit)
@@ -92,4 +93,10 @@ dependencies {
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation("androidx.camera:camera-core:1.3.0")
+    implementation("androidx.camera:camera-camera2:1.3.0")
+    implementation("androidx.camera:camera-lifecycle:1.3.0")
+    implementation("androidx.camera:camera-view:1.3.0")
+    implementation("androidx.camera:camera-extensions:1.3.0")
 }

@@ -6,6 +6,7 @@ import com.example.celestik.manager.AprilTagManager
 import com.example.celestik.manager.ArUcoManager
 import com.example.celestik.viewmodel.MarkerType
 import com.example.celestik.viewmodel.SharedViewModel
+import com.google.android.libraries.mapsplatform.transportation.consumer.model.MarkerType
 import org.opencv.aruco.Aruco
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
@@ -17,14 +18,10 @@ import org.opencv.video.Video
  */
 class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
-    /**
-     * Represents a detected marker with its ID and corner matrix.
-     */
+    /** Represents a detected marker with its ID and corner matrix. */
     data class Marker(val id: Int, val corners: Mat)
 
-    /**
-     * Encapsulates the result of a frame analysis.
-     */
+    /** Encapsulates the result of a frame analysis. */
     data class AnalysisResult(
         val contours: List<MatOfPoint>,
         val annotatedMat: Mat,
@@ -55,7 +52,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         try {
             // Preprocessing
             Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY)
-            Imgproc.GaussianBlur(grayMat, grayMat, Size(5.0, 5.0), 0.0)
+            Imgproc.GaussianBlur(grayMat, grayMat, Size(5.0F, 5.0F), 0.0)
 
             val thresholdedImage = applyAdaptiveThresholding(grayMat)
             val watershedMarkers = applyWatershed(thresholdedImage)
@@ -65,7 +62,10 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
             val holes = detectHoles(grayMat)
 
             // Optical flow deformation tracking
-            prevGrayMat?.let { detectDeformationsWithOpticalFlow(it, grayMat) }
+            prevGrayMat?.let {
+                val flowPoints = detectDeformationsWithOpticalFlow(it, grayMat)
+                // Optional: draw flowPoints or use them for motion analysis
+            }
             prevGrayMat = grayMat.clone()
 
             // Marker detection
@@ -100,18 +100,21 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         }
     }
 
+    /** Applies Canny edge detection. */
     fun detectEdges(image: Mat): Mat {
         val edges = Mat()
         Imgproc.Canny(image, edges, 100.0, 200.0)
         return edges
     }
 
+    /** Applies camera calibration to remove lens distortion. */
     fun applyCalibration(image: Mat, cameraMatrix: Mat, distortionCoeffs: Mat): Mat {
         val undistortedImage = Mat()
         Imgproc.undistort(image, undistortedImage, cameraMatrix, distortionCoeffs)
         return undistortedImage
     }
 
+    /** Extracts width and height from contours. */
     fun extractDimensionsFromContours(contours: List<MatOfPoint>): List<Double> {
         val dimensions = mutableListOf<Double>()
         for (contour in contours) {
@@ -122,19 +125,15 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return dimensions
     }
 
+    /** Finds contours in a binary image. */
     private fun findContours(image: Mat): List<MatOfPoint> {
         val contours = ArrayList<MatOfPoint>()
         val hierarchy = Mat()
-        Imgproc.findContours(
-            image,
-            contours,
-            hierarchy,
-            Imgproc.RETR_EXTERNAL,
-            Imgproc.CHAIN_APPROX_SIMPLE
-        )
+        Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
         return contours
     }
 
+    /** Detects circular holes using Hough transform. */
     fun detectHoles(image: Mat): Mat {
         val circles = Mat()
         Imgproc.HoughCircles(
@@ -151,6 +150,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return circles
     }
 
+    /** Detects deformations based on contour complexity. */
     fun detectDeformations(contours: List<MatOfPoint>): List<MatOfPoint> {
         val deformations = mutableListOf<MatOfPoint>()
         for (contour in contours) {
@@ -164,6 +164,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return deformations
     }
 
+    /** Applies adaptive thresholding for segmentation. */
     fun applyAdaptiveThresholding(image: Mat): Mat {
         val thresholdedImage = Mat()
         Imgproc.adaptiveThreshold(
@@ -178,6 +179,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return thresholdedImage
     }
 
+    /** Filters contours by minimum area. */
     fun filterContours(contours: List<MatOfPoint>, minArea: Double): List<MatOfPoint> {
         val filteredContours = mutableListOf<MatOfPoint>()
         for (contour in contours) {
@@ -189,6 +191,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return filteredContours
     }
 
+    /** Applies watershed segmentation. */
     fun applyWatershed(image: Mat): Mat {
         val markers = Mat()
         Imgproc.connectedComponents(image, markers)
@@ -196,12 +199,14 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return markers
     }
 
+    /** Detects countersinks using template matching. */
     fun detectCountersinks(image: Mat, template: Mat): Mat {
         val result = Mat()
         Imgproc.matchTemplate(image, template, result, Imgproc.TM_CCOEFF_NORMED)
         return result
     }
 
+    /** Tracks motion between frames using optical flow. */
     fun detectDeformationsWithOpticalFlow(prevFrame: Mat, nextFrame: Mat): MatOfPoint2f {
         val prevPts = MatOfPoint2f()
         Imgproc.goodFeaturesToTrack(prevFrame, prevPts, 100, 0.3, 7.0)
@@ -212,6 +217,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return nextPts
     }
 
+    /** Converts contour dimensions to real-world measurements. */
     fun calculateMeasurements(contours: List<MatOfPoint>, scale: Double): List<Double> {
         val measurements = mutableListOf<Double>()
         for (contour in contours) {
