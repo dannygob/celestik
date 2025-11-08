@@ -13,6 +13,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+/**
+ * Placeholder screen for inspection preview.
+ * Currently displays a title and a button with a toast message.
+ *
+ * @param navController Navigation controller for routing.
+ */
 @Composable
 fun InspectionPreviewScreen(navController: NavController) {
     val context = LocalContext.current
@@ -26,6 +32,7 @@ fun InspectionPreviewScreen(navController: NavController) {
 
         Button(onClick = {
             Toast.makeText(context, "Procesando preview...", Toast.LENGTH_SHORT).show()
+            // TODO: Implement preview logic or navigation
         }) {
             Text("Ver componentes")
         }
