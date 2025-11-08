@@ -38,6 +38,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "11"
+        languageVersion = "1.9"
     }
 
     buildFeatures {
@@ -65,14 +66,13 @@ dependencies {
     // Otros
     implementation(libs.litert)
     implementation(libs.androidx.navigation.runtime.android)
-    implementation(libs.androidx.navigation.compose.jvmstubs)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.gson)
     implementation(libs.poi.ooxml)
     implementation("com.facebook.shimmer:shimmer:0.5.0")
-    implementation("androidx.navigation:navigation-compose:2.7.0")
+    implementation("androidx.navigation:navigation-compose:2.9.3")
 
     // Hilt
     implementation(libs.hilt.android)
