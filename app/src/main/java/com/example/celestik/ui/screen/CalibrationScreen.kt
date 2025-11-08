@@ -10,6 +10,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
+/**
+ * Displays the calibration screen with a title and a button to initiate manual calibration.
+ *
+ * @param navController Navigation controller for screen transitions.
+ */
 @Composable
 fun CalibrationScreen(navController: NavController) {
     val context = LocalContext.current
@@ -26,7 +31,7 @@ fun CalibrationScreen(navController: NavController) {
 
         Button(onClick = {
             Toast.makeText(context, "Calibrating...", Toast.LENGTH_SHORT).show()
-            // Action of manual calibration
+            // TODO: Trigger actual calibration logic or navigate to calibration flow
         }) {
             Text("Iniciar calibración")
         }
