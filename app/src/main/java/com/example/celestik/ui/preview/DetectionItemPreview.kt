@@ -8,6 +8,10 @@ import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
 import com.example.celestik.models.geometry.BoundingBox
 
+/**
+ * Displays a simple text preview of a DetectionItem.
+ * Intended for testing model instantiation and basic rendering.
+ */
 @Composable
 fun DetectionItemPreview() {
     val item = DetectionItem(
