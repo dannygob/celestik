@@ -9,15 +9,21 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.drawText
-
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.celestik.models.calibration.DetectedFeature
 
+/**
+ * Renders a blueprint-style canvas with detected features and optional dimension labels.
+ * Supports metric (mm) and imperial (inches) units.
+ *
+ * @param features List of detected features to render.
+ * @param useInches Whether to convert dimensions from mm to inches.
+ */
 @Composable
 fun BlueprintView(features: List<DetectedFeature>, useInches: Boolean = false) {
     val textMeasurer = rememberTextMeasurer()
+
     Canvas(
         modifier = Modifier
             .fillMaxSize()
@@ -30,11 +36,10 @@ fun BlueprintView(features: List<DetectedFeature>, useInches: Boolean = false) {
                 radius = 5f,
                 style = Stroke(width = 2f)
             )
-            val dimension = if (useInches) {
-                feature.measurements["diameter"]?.div(25.4f)
-            } else {
-                feature.measurements["diameter"]
-            }
+
+            val diameter = feature.measurements["diameter"]
+            val dimension = if (useInches) diameter?.div(25.4f) else diameter
+
             dimension?.let {
                 drawText(
                     textMeasurer = textMeasurer,
@@ -59,7 +64,8 @@ fun BlueprintViewPreview() {
                 xCoord = 100f,
                 yCoord = 100f,
                 confidence = 0.9f,
-                timestamp = 1234567890
+                timestamp = 1234567890,
+                measurements = mapOf("diameter" to 5.0f)
             ),
             DetectedFeature(
                 id = 2,
@@ -68,7 +74,8 @@ fun BlueprintViewPreview() {
                 xCoord = 200f,
                 yCoord = 200f,
                 confidence = 0.9f,
-                timestamp = 1234567890
+                timestamp = 1234567890,
+                measurements = mapOf("diameter" to 8.0f)
             )
         )
     )
