@@ -18,7 +18,15 @@ import com.example.celestik.ui.component.BlueprintView
 import com.example.celestik.utils.Result
 import com.example.celestik.viewmodel.DetailsViewModel
 import com.example.celestik.viewmodel.SharedViewModel
-
+/**
+ * Displays detailed information about a detection item, including visual features and traceability.
+ *
+ * @param navController Navigation controller for routing.
+ * @param detailType Type of detail view (e.g., "hole", "alodine").
+ * @param detectionItem Optional detection item to display.
+ * @param detailsViewModel ViewModel for loading traceability and features.
+ * @param sharedViewModel Shared app state (e.g., unit preferences).
+ */
 @Composable
 fun DetailsScreen(
     navController: NavController,
@@ -37,10 +45,10 @@ fun DetailsScreen(
 
     LaunchedEffect(detectionItem) {
         detectionItem?.linkedQrCode?.let { code ->
-            viewModel.loadTraceability(code)
+            detailsViewModel.loadTraceability(code)
         }
         detectionItem?.id?.let {
-            viewModel.loadFeatures(it)
+            detailsViewModel.loadFeatures(it)
         }
     }
 
@@ -71,17 +79,16 @@ fun DetailsScreen(
             visible = traceabilityResult is Result.Success,
             enter = fadeIn(animationSpec = tween(durationMillis = 1000))
         ) {
-            val traceability =
-                (traceabilityResult as Result.Success).data
+            val traceability = (traceabilityResult as Result.Success).data
             traceability?.let {
-                HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
+                HorizontalDivider()
                 Text("🔍 Traceability:", style = MaterialTheme.typography.titleMedium)
                 Text("• Code: ${it.code}")
                 Text("• Pieces: ${it.Pieces}")
-                Text("• operator: ${it.operator}")
+                Text("• Operator: ${it.operator}")
                 Text("• Date: ${it.Date}")
                 Text("• Results: ${it.results}")
-            } ?: Text("❌ Without of Traceability.")
+            } ?: Text("❌ No traceability data available.")
         }
 
         if (traceabilityResult is Result.Loading) {
@@ -89,13 +96,13 @@ fun DetailsScreen(
         }
 
         if (traceabilityResult is Result.Error) {
-            Text("❌ Error to load the information of traceability.")
+            Text("❌ Error loading traceability information.")
         }
 
         Spacer(modifier = Modifier.height(32.dp))
         Button(onClick = {
-            Toast.makeText(context, stringResource(R.string.report_issue), Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(context, stringResource(R.string.report_issue), Toast.LENGTH_SHORT).show()
+            // TODO: Implement issue reporting logic
         }) {
             Text(stringResource(R.string.report_issue))
         }
