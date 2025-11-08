@@ -12,47 +12,66 @@ import com.example.celestik.models.calibration.DetectedFeature
 import com.example.celestik.models.report.ReportConfig
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * CelestikDao defines all database operations for detection-related entities.
+ * Uses Room annotations and Kotlin coroutines for asynchronous access.
+ */
 @Dao
 interface CelestikDao {
+
+    // Inserts a single detection item, replacing on conflict.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: DetectionItem)
 
+    // Retrieves all detection items ordered by timestamp (newest first).
     @Query("SELECT * FROM detection_items ORDER BY timestamp DESC")
     fun getAll(): Flow<List<DetectionItem>>
 
+    // Deletes a single detection item.
     @Delete
     suspend fun delete(item: DetectionItem)
 
+    // Inserts a single detected feature.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDetection(detection: DetectedFeature)
 
+    // Inserts multiple detected features.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDetections(detections: List<DetectedFeature>)
 
+    // Retrieves all detected features ordered by timestamp.
     @Query("SELECT * FROM detected_features ORDER BY timestamp DESC")
     fun getAllDetections(): Flow<List<DetectedFeature>>
 
+    // Deletes all detected features.
     @Query("DELETE FROM detected_features")
     suspend fun clearDetections()
 
+    // Inserts camera calibration data.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCameraCalibrationData(cameraCalibrationData: CameraCalibrationData)
 
+    // Retrieves the latest camera calibration data.
     @Query("SELECT * FROM camera_calibration ORDER BY id DESC LIMIT 1")
     fun getCameraCalibrationData(): Flow<CameraCalibrationData?>
 
+    // Inserts report configuration.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReportConfig(reportConfig: ReportConfig)
 
+    // Retrieves the latest report configuration.
     @Query("SELECT * FROM report_config ORDER BY id DESC LIMIT 1")
     fun getReportConfig(): Flow<ReportConfig?>
 
+    // Retrieves detected features linked to a specific detection item.
     @Query("SELECT * FROM detected_features WHERE detectionItemId = :detectionItemId")
     fun getFeaturesForDetection(detectionItemId: Long): Flow<List<DetectedFeature>>
 
+    // Inserts an inspection and returns its row ID.
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertInspection(inspection: Inspection): Long
 
+    // Retrieves all inspections ordered by timestamp.
     @Query("SELECT * FROM inspections ORDER BY timestamp DESC")
     fun getAllInspections(): Flow<List<Inspection>>
 }
