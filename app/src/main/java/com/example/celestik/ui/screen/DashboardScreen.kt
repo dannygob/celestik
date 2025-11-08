@@ -1,44 +1,10 @@
-package com.example.celestik.ui.screen
-
-
-import android.widget.Toast
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.celestik.models.DetectionItem
-import com.example.celestik.navigation.NavigationRoutes
-import com.example.celestik.utils.LocalizedStrings
-import com.example.celestik.utils.exportJsonSummary
-import com.example.celestik.utils.generateCsvFromDetections
-import com.example.celestik.utils.generatePdfFromDetections
-import com.example.celestik.utils.generateWordFromDetections
-import com.example.celestik.viewmodel.MainViewModel
-
-
+/**
+ * Displays the main dashboard screen with navigation, calibration toggle,
+ * inspection modes, and report export options.
+ *
+ * @param navController Navigation controller for routing.
+ * @param viewModel ViewModel containing detection data and app state.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -69,7 +35,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(16.dp))
 
-            // 🔧 Settings Section
+            // Calibration toggle
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(
@@ -83,8 +49,7 @@ fun DashboardScreen(
                                 context,
                                 strings.toastOpenCalibration,
                                 Toast.LENGTH_SHORT
-                            )
-                                .show()
+                            ).show()
                             navController.navigate(NavigationRoutes.Calibration.route)
                         }) {
                             Text(strings.openCalibration)
@@ -108,15 +73,14 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 🚀 Inspection Modes Section
+            // Inspection modes
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(strings.analysisModes, style = MaterialTheme.typography.titleMedium)
 
                     Row {
                         Button(onClick = {
-                            Toast.makeText(context, strings.toastModeBody, Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(context, strings.toastModeBody, Toast.LENGTH_SHORT).show()
                         }) {
                             Text(strings.modeBody)
                         }
@@ -124,8 +88,7 @@ fun DashboardScreen(
                         Spacer(Modifier.width(8.dp))
 
                         Button(onClick = {
-                            Toast.makeText(context, strings.toastModePrecision, Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(context, strings.toastModePrecision, Toast.LENGTH_SHORT).show()
                         }) {
                             Text(strings.modePrecision)
                         }
@@ -133,8 +96,7 @@ fun DashboardScreen(
                         Spacer(Modifier.width(8.dp))
 
                         Button(onClick = {
-                            Toast.makeText(context, strings.toastModeMetals, Toast.LENGTH_SHORT)
-                                .show()
+                            Toast.makeText(context, strings.toastModeMetals, Toast.LENGTH_SHORT).show()
                         }) {
                             Text(strings.modeMetals)
                         }
@@ -144,7 +106,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 📊 History and Report Generation Section
+            // Report generation
             Card(elevation = CardDefaults.cardElevation()) {
                 Column(Modifier.padding(16.dp)) {
                     Text(strings.reportsSection, style = MaterialTheme.typography.titleMedium)
@@ -167,26 +129,10 @@ fun DashboardScreen(
                         val detecciones = viewModel.detections.value
 
                         val archivo = when (formatSelected) {
-                            "PDF" -> generatePdfFromDetections(
-                                context,
-                                detecciones as List<DetectionItem>, loteId
-                            )
-
-                            "Word" -> generateWordFromDetections(
-                                context,
-                                detecciones as List<DetectionItem>, loteId
-                            )
-
-                            "JSON" -> exportJsonSummary(
-                                context,
-                                detecciones as List<DetectionItem>, loteId
-                            )
-
-                            "CSV" -> generateCsvFromDetections(
-                                context,
-                                detecciones as List<DetectionItem>, loteId
-                            )
-
+                            "PDF" -> generatePdfFromDetections(context, detecciones as List<DetectionItem>, loteId)
+                            "Word" -> generateWordFromDetections(context, detecciones as List<DetectionItem>, loteId)
+                            "JSON" -> exportJsonSummary(context, detecciones as List<DetectionItem>, loteId)
+                            "CSV" -> generateCsvFromDetections(context, detecciones as List<DetectionItem>, loteId)
                             else -> null
                         }
 
@@ -195,8 +141,7 @@ fun DashboardScreen(
                                 context,
                                 "Reporte generado: ${it.name}",
                                 Toast.LENGTH_LONG
-                            )
-                                .show()
+                            ).show()
                         }
                     }) {
                         Text("Generar reporte ($formatSelected)")
@@ -214,7 +159,7 @@ fun DashboardScreen(
 
             Spacer(Modifier.height(20.dp))
 
-            // 🌐 Multilenguaje
+            // Language hint
             Text(
                 text = strings.languageSettingHint,
                 style = MaterialTheme.typography.bodyMedium
