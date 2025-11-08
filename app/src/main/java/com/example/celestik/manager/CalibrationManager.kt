@@ -159,6 +159,15 @@ class CalibrationManager @Inject constructor(private val context: Context) {
         val allCorners = ArrayList<Mat>()
         val allIds = ArrayList<Mat>()
         val imageSize = images[0].size()
+
         for (image in images) {
             val (corners, ids) = detectCharucoPattern(image)
-            if (corners.total() > 0 && ids.total() > 0
+            if (corners.total() > 0 && ids.total() > 0) {
+                allCorners.add(corners)
+                allIds.add(ids)
+            }
+        }
+
+        return generateCalibrationMatrix(allCorners, allIds, imageSize)
+    }
+}
