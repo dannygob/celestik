@@ -20,11 +20,9 @@ class MainViewModel @Inject constructor(
 
     val detections: StateFlow<Result<List<DetectionItem>>> =
         repository.getAll()
-            .map<List<DetectionItem>, Result<List<DetectionItem>>> {
-                Result.Success(it)
-            }
-            .catch {
-                emit(Result.Error(it as Exception))
+            .map { Result.Success(it) }
+            .catch { throwable ->
+                emit(Result.Error(throwable as? Exception ?: Exception(throwable)))
             }
             .stateIn(
                 scope = viewModelScope,
