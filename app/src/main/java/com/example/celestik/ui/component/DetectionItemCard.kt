@@ -1,10 +1,6 @@
 package com.example.celestik.ui.component
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +12,12 @@ import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
 import com.example.celestik.models.geometry.BoundingBox
 
+/**
+ * Displays a summary card for a DetectionItem.
+ * Shows ID, type, status, and optional measurement in millimeters.
+ *
+ * @param item The detection item to display.
+ */
 @Composable
 fun DetectionItemCard(item: DetectionItem) {
     Card(
