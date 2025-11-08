@@ -1,32 +1,10 @@
-package com.example.celestik.ui.screen
-
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.util.Log
-import android.util.Size
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.camera.core.*
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.celestik.manager.ImageClassifier
-import com.example.celestik.utils.OpenCVInitializer
-import com.example.celestik.viewmodel.MainViewModel
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-
+/**
+ * Displays a camera preview and performs real-time image classification.
+ * Initializes OpenCV and handles camera permission checks.
+ *
+ * @param viewModel ViewModel for storing classification results.
+ * @param modifier Optional layout modifier.
+ */
 @Composable
 fun CameraView(
     viewModel: MainViewModel = viewModel(),
@@ -42,11 +20,11 @@ fun CameraView(
         ) == PackageManager.PERMISSION_GRANTED
 
         if (!permissionGranted) {
-            Log.e("CameraView", "Permiso de cámara no concedido.")
+            Log.e("CameraView", "Camera permission not granted.")
         }
 
         val success = OpenCVInitializer.initOpenCV(context)
-        if (!success) Log.e("CameraView", "Error al inicializar OpenCV")
+        if (!success) Log.e("CameraView", "Failed to initialize OpenCV")
     }
 
     DisposableEffect(Unit) {
@@ -55,7 +33,7 @@ fun CameraView(
 
     if (!permissionGranted) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Permiso de cámara no concedido.")
+            Text("Camera permission not granted.")
         }
         return
     }
@@ -75,54 +53,4 @@ fun CameraView(
             modifier = Modifier.fillMaxSize()
         )
     }
-}
-
-private fun startCamera(
-    context: Context,
-    previewView: PreviewView,
-    cameraExecutor: ExecutorService,
-    viewModel: MainViewModel,
-) {
-    val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
-    cameraProviderFuture.addListener({
-        val cameraProvider = cameraProviderFuture.get()
-
-        val preview = Preview.Builder().build().apply {
-            surfaceProvider = previewView.surfaceProvider
-        }
-
-        val imageAnalysis = ImageAnalysis.Builder()
-            .setTargetResolution(Size(224, 224))
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build().apply {
-                setAnalyzer(cameraExecutor) { imageProxy ->
-                    try {
-                        val bitmap = imageProxyToBitmap(imageProxy)
-                        val classifier = ImageClassifier(context)
-                        val predictions = classifier.runInference(bitmap)
-                        val tipo = classifier.mapPredictionToFeatureType(predictions)
-                        Log.d("Clasificación", "Resultado: $tipo")
-                        viewModel.setTipoClasificacion(tipo)
-                    } catch (e: Exception) {
-                        Log.e("Clasificador", "Error en inferencia", e)
-                    } finally {
-                        imageProxy.close()
-                    }
-                }
-            }
-
-        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-        try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
-                context as LifecycleOwner,
-                cameraSelector,
-                preview,
-                imageAnalysis
-            )
-        } catch (e: Exception) {
-            Log.e("CameraView", "Error al iniciar cámara", e)
-        }
-    }, ContextCompat.getMainExecutor(context))
 }
