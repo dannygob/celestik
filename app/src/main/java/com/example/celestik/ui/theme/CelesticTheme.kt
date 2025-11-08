@@ -7,7 +7,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// 🎨 Paleta clara
+// 🎨 Light color palette
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFF3366CC),
     onPrimary = Color.White,
@@ -18,7 +18,7 @@ private val LightColorScheme = lightColorScheme(
     error = Color(0xFFB00020)
 )
 
-// 🌙 Paleta oscura
+// 🌙 Dark color palette
 private val DarkColorScheme = darkColorScheme(
     primary = Color(0xFF3366CC),
     onPrimary = Color.Black,
@@ -29,7 +29,12 @@ private val DarkColorScheme = darkColorScheme(
     error = Color(0xFFCF6679)
 )
 
-// 🌈 Tema general
+/**
+ * Applies the Celestic theme to the app.
+ *
+ * @param useDarkTheme Whether to use the dark theme. Defaults to system setting.
+ * @param content Composable content to wrap in the theme.
+ */
 @Composable
 fun CelesticTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
