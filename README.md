@@ -272,3 +272,7 @@ graph_placeholder.png
 - Crear una aplicación base para añadir módulos.
 - Desarrollar módulos para otros dominios como automoción, aeronáutica, etc.
 - Se utilizará ML Kit para el módulo base para multiplataforma.
+
+🛠️ logging Inicial del Proyecto 
+- ajustes@celestik.com   password: 123456789  (para acceso a ajustes y modificaciones)
+- usuario@celestik.com   password: 123456789  (para acceso de usuario normal)
