@@ -45,63 +45,69 @@ android {
         compose = true
     }
 }
+
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
+
 dependencies {
-    // Core
+
+    // CORE / ANDROIDX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.runtime)
 
-    // Jetpack Compose
+    // JETPACK COMPOSE
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.ui.text)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
-    // Room
+    // ROOM / DATABASE
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.room.runtime.android)
-
-    // Otros
-    implementation(libs.litert)
-    implementation(libs.androidx.navigation.runtime.android)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.gson)
-    implementation(libs.poi.ooxml)
-    implementation(libs.shimmer)
-    implementation(libs.androidx.navigation.compose)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    implementation(libs.transportation.consumer)
     implementation(libs.room.external.antlr)
-    implementation(libs.androidx.runtime)
-    implementation(libs.firebase.auth.ktx)
+
+    // NAVIGATION
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.runtime.android)
+
+    // HILT / DEPENDENCY INJECTION
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
 
-    // AprilTag
-    implementation(libs.apriltag.java)
-    implementation(project(":openCv")) // <- solo si lo necesitas en el futuro
+    // CAMERA / MEDIA (UNIFICADO EN CameraX 1.5.1)
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.extensions)
 
-    // Testing
+    // FIREBASE / GOOGLE=
+    implementation(libs.google.firebase.auth.ktx) // Use the latest version
+    implementation(libs.firebase.auth.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.transportation.consumer)
+    implementation(libs.gson)
+    implementation(libs.litert)
+
+    // OTROS / UTILIDADES
+    implementation(libs.shimmer)
+    implementation(libs.poi.ooxml)
+    implementation(libs.apriltag.java)
+    implementation(project(":openCv"))
+
+    // TESTING
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
-
-    // Debug
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.camera2)
-    implementation(libs.camera.lifecycle.v130)
-    implementation(libs.androidx.camera.view.v130)
-    implementation(libs.androidx.camera.extensions)
 }

@@ -12,7 +12,7 @@ import org.opencv.imgproc.Imgproc
 /**
  * Processes camera frames using OpenCV and FrameAnalyzer.
  */
-class CameraFrameProcessor(
+class  CameraFrameProcessor(
     private val frameAnalyzer: FrameAnalyzer,
     private val onResult: (FrameAnalyzer.AnalysisResult) -> Unit
 ) : ImageAnalysis.Analyzer {
