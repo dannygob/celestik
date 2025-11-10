@@ -28,11 +28,14 @@ data class TraceabilityItem(
     /**
      * Date of inspection or traceability record (format: "YYYY-MM-DD HH:mm").
      */
-    val date: String,
+    val Date: String,
 
     /**
      * Summary of inspection results or status.
      */
-    val results: String
+    val results: String,
 
-) : Parcelable
+    val Pieces: String,
+
+
+    ) : Parcelable
