@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.ui.geometry.Size
 import com.example.celestik.manager.AprilTagManager
 import com.example.celestik.manager.ArUcoManager
-import com.example.celestik.viewmodel.MarkerType
 import com.example.celestik.viewmodel.SharedViewModel
 import com.google.android.libraries.mapsplatform.transportation.consumer.model.MarkerType
 import org.opencv.aruco.Aruco
@@ -63,7 +62,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
             // Optical flow deformation tracking
             prevGrayMat?.let {
-                val flowPoints = detectDeformationsWithOpticalFlow(it, grayMat)
+                detectDeformationsWithOpticalFlow(it, grayMat)
                 // Optional: draw flowPoints or use them for motion analysis
             }
             prevGrayMat = grayMat.clone()

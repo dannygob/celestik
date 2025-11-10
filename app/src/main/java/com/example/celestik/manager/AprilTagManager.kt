@@ -69,14 +69,8 @@ class AprilTagManager {
             image.copyTo(gray)
         }
 
-        // Extract bytes from the grayscale image
-        val width = gray.width()
-        val height = gray.height()
-        val grayBytes: Mat? = ByteArray(width * height)
-        gray.get(0, 0, grayBytes)
-
         // Detect AprilTags using the native detector
-        val detections = detector.detect(grayBytes, width, height)
+        val detections = detector.detect(gray)
             .filterIsInstance<AprilTagDetection>()
 
         // Map detections to Marker objects

@@ -2,6 +2,7 @@ package com.example.celestik.manager
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.core.graphics.get
 import androidx.core.graphics.scale
 import androidx.room.jarjarred.org.antlr.v4.gui.Interpreter
 import org.tensorflow.lite.Interpreter
@@ -9,7 +10,6 @@ import java.io.FileInputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
-import androidx.core.graphics.get
 
 /**
  * ImageClassifier loads a TFLite model and performs inference on input Bitmaps.
@@ -33,7 +33,7 @@ class ImageClassifier(context: Context) {
         val startOffset = assetFileDescriptor.startOffset
         val declaredLength = assetFileDescriptor.declaredLength
         val modelBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-        interpreter = Interpreter(modelBuffer)
+        interpreter = Interpreter(modelBuffer as Array<out String?>?)
     }
 
     /**

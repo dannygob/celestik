@@ -64,7 +64,7 @@ interface CelestikDao {
     fun getReportConfig(): Flow<ReportConfig?>
 
     // Retrieves detected features linked to a specific detection item.
-    @Query("SELECT * FROM detected_features WHERE detectionItemId = :detectionItemId")
+    @Query("SELECT * FROM detected_features WHERE detection_item_id = :detectionItemId")
     fun getFeaturesForDetection(detectionItemId: Long): Flow<List<DetectedFeature>>
 
     // Inserts an inspection and returns its row ID.

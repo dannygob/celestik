@@ -114,4 +114,6 @@ dependencies {
     implementation(libs.kernel)
     implementation(libs.layout)
 
+    implementation("org.tensorflow:tensorflow-lite:2.15.0")
+
 }
