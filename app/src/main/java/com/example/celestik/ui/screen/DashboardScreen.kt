@@ -31,7 +31,7 @@ import com.example.celestik.utils.LocalizedStrings
 import com.example.celestik.utils.ReportGenerator.exportJsonSummary
 import com.example.celestik.utils.ReportGenerator.generateCsvFromDetections
 import com.example.celestik.utils.ReportGenerator.generatePdfFromDetections
-import com.example.celestik.utils.generateWordFromDetections
+import com.example.celestik.utils.ReportGenerator.generateWordFromDetections
 import com.example.celestik.viewmodel.MainViewModel
 
 /**

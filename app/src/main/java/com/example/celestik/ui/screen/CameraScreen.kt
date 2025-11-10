@@ -19,6 +19,7 @@ import com.example.celestik.opencv.FrameAnalyzer
 import com.example.celestik.utils.matToImageBitmap
 import com.example.celestik.viewmodel.CameraViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.launch
 import org.opencv.core.CvType
 import org.opencv.core.Mat
@@ -46,7 +47,7 @@ fun CameraScreen(
     LaunchedEffect(Unit) {
         val cameraProvider = cameraProviderFuture.get()
         val preview = Preview.Builder().build().also {
-            it.setSurfaceProvider(previewView.surfaceProvider)
+            it.surfaceProvider = previewView.surfaceProvider
         }
 
         val imageAnalyzer = ImageAnalysis.Builder()
