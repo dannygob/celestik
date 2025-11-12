@@ -7,60 +7,47 @@ import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
 
 /**
- * Represents a visual feature detected in a calibrated image.
- * Used for storing feature metadata such as type, position, confidence, and measurements.
+ * Representa una característica visual detectada en una imagen calibrada.
+ * Incluye metadatos como tipo, posición, confianza, medidas técnicas y trazabilidad.
  */
 @Parcelize
 @Entity(tableName = "detected_features")
 data class DetectedFeature(
 
-    /**
-     * Auto-generated primary key for Room.
-     */
+    /** Clave primaria autogenerada para Room. */
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
-    /**
-     * Foreign key linking this feature to a DetectionItem.
-     */
+    /** Clave foránea que vincula esta característica con un DetectionItem. */
     @ColumnInfo(name = "detection_item_id")
     val detectionItemId: Long,
 
-    /**
-     * Type of feature detected (e.g., "charuco_corner", "aruco_marker", "edge").
-     */
+    /** Tipo de característica detectada (ej. "hole", "countersink", "threaded_hole", "halo"). */
     @ColumnInfo(name = "feature_type")
     val featureType: String,
 
-    /**
-     * X coordinate of the feature in image space.
-     */
+    /** Coordenada X en el espacio de imagen. */
     @ColumnInfo(name = "x_coord")
     val xCoord: Float,
 
-    /**
-     * Y coordinate of the feature in image space.
-     */
+    /** Coordenada Y en el espacio de imagen. */
     @ColumnInfo(name = "y_coord")
     val yCoord: Float,
 
-    /**
-     * Confidence score of the detection (range: 0.0 to 1.0).
-     */
+    /** Nivel de confianza de la detección (rango: 0.0 a 1.0). */
     @ColumnInfo(name = "confidence")
     val confidence: Float,
 
-    /**
-     * Timestamp of detection in epoch milliseconds.
-     */
+    /** Marca de tiempo de la detección en milisegundos epoch. */
     @ColumnInfo(name = "timestamp")
     val timestamp: Long,
 
-    /**
-     * Optional measurements associated with the feature (e.g., length, angle).
-     * Requires a Room TypeConverter for Map<String, Float>.
-     */
+    /** Medidas técnicas asociadas (ej. diámetro, profundidad, ángulo). */
     @ColumnInfo(name = "measurements")
-    val measurements: Map<String, Float> = emptyMap()
+    val measurements: Map<String, Float> = emptyMap(),
+
+    /** ID del tag virtual generado para esta característica (opcional). */
+    @ColumnInfo(name = "tag_id")
+    val tagId: Int? = null
 
 ) : Parcelable
