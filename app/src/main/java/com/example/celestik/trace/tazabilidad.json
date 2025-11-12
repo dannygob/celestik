@@ -1,13 +1,45 @@
 {
-  "codigo": "QR_456XYZ",
-  "pieza": "Soporte-A",
-  "lote": "Lote_20250727",
-  "ordenFabricacion": "OF_1193",
-  "fechaInspeccion": "2025-07-27T14:32:12Z",
-  "resultado": "WARNING",
-  "medidasDetectadas": [
-    4.2,
-    5.8
-  ],
-  "notas": "Avellanado fuera de tolerancia"
+  "inspeccion": {
+    "codigo": "QR_456XYZ",
+    "pieza": "Soporte-A",
+    "lote": "Lote_20250727",
+    "ordenFabricacion": "OF_1193",
+    "fechaInspeccion": "2025-07-27T14:32:12Z",
+    "resultado": "WARNING",
+    "notas": "Avellanado fuera de tolerancia"
+  },
+  "trazabilidad": [
+    {
+      "featureId": 1,
+      "tagId": 1,
+      "tipo": "circulo",
+      "x": 100.0,
+      "y": 100.0,
+      "medidas": {
+        "diametro": 4.2
+      }
+    },
+    {
+      "featureId": 2,
+      "tagId": 2,
+      "tipo": "arista",
+      "x": 200.0,
+      "y": 200.0,
+      "medidas": {
+        "longitud": 12.5,
+        "ángulo": 90.0
+      }
+    },
+    {
+      "featureId": 3,
+      "tagId": 3,
+      "tipo": "halo",
+      "x": 150.0,
+      "y": 180.0,
+      "medidas": {
+        "radioInterno": 3.0,
+        "radioExterno": 5.0
+      }
+    }
+  ]
 }
