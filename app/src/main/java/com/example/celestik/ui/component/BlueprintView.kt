@@ -1,83 +1,99 @@
 package com.example.celestik.ui.component
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import com.example.celestik.manager.AprilTagManager.Marker
 import com.example.celestik.models.calibration.DetectedFeature
 
 /**
- * Renders a blueprint-style canvas with detected features and optional dimension labels.
- * Supports metric (mm) and imperial (inches) units.
+ * Vista híbrida que muestra:
+ * - Imagen de fondo tipo plano
+ * - Contornos de etiquetas virtuales (tags)
+ * - Características detectadas con medidas en mm o pulgadas
  *
- * @param features List of detected features to render.
- * @param useInches Whether to convert dimensions from mm to inches.
+ * @param image Imagen de fondo
+ * @param markers Lista de etiquetas virtuales
+ * @param features Lista de características detectadas
+ * @param useInches Si se desea mostrar medidas en pulgadas
  */
 @Composable
-fun BlueprintView(features: List<DetectedFeature>, useInches: Boolean = false) {
+fun BlueprintHybridView(
+    image: ImageBitmap,
+    markers: List<Marker>,
+    features: List<DetectedFeature>,
+    useInches: Boolean = false,
+    modifier: Modifier = Modifier
+) {
     val textMeasurer = rememberTextMeasurer()
 
-    Canvas(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Blue.copy(alpha = 0.1f))
-    ) {
-        features.forEach { feature ->
-            drawCircle(
-                color = Color.White,
-                center = Offset(feature.xCoord, feature.yCoord),
-                radius = 5f,
-                style = Stroke(width = 2f)
-            )
+    Box(modifier = modifier.fillMaxSize()) {
+        Image(
+            bitmap = image,
+            contentDescription = "Blueprint background",
+            modifier = Modifier.fillMaxSize()
+        )
 
-            val diameter = feature.measurements["diameter"]
-            val dimension = if (useInches) diameter?.div(25.4f) else diameter
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            // Dibujar contornos de los tags
+            markers.forEach { marker ->
+                val points = marker.corners.chunked(2).map {
+                    Offset(it[0].toFloat(), it[1].toFloat())
+                }
 
-            dimension?.let {
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = "%.2f".format(it),
-                    style = TextStyle(color = Color.White),
-                    topLeft = Offset(feature.xCoord + 10, feature.yCoord - 10)
+                for (i in points.indices) {
+                    val start = points[i]
+                    val end = points[(i + 1) % points.size]
+                    drawLine(color = Color.Blue, start = start, end = end, strokeWidth = 2f)
+                }
+
+                drawIntoCanvas { canvas ->
+                    canvas.nativeCanvas.drawText(
+                        "Tag ${marker.id}",
+                        marker.center[0].toFloat(),
+                        marker.center[1].toFloat(),
+                        android.graphics.Paint().apply {
+                            color = android.graphics.Color.BLUE
+                            textSize = 32f
+                        }
+                    )
+                }
+            }
+
+            // Dibujar características detectadas
+            features.forEach { feature ->
+                drawCircle(
+                    color = Color.White,
+                    center = Offset(feature.xCoord, feature.yCoord),
+                    radius = 5f,
+                    style = Stroke(width = 2f)
                 )
+
+                val diameter = feature.measurements["diameter"]
+                val dimension = if (useInches) diameter?.div(25.4f) else diameter
+
+                dimension?.let {
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = "%.2f".format(it),
+                        style = TextStyle(color = Color.White, fontSize = 14.sp),
+                        topLeft = Offset(feature.xCoord + 10, feature.yCoord - 10)
+                    )
+                }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun BlueprintViewPreview() {
-    BlueprintView(
-        features = listOf(
-            DetectedFeature(
-                id = 1,
-                detectionItemId = 1,
-                featureType = "type",
-                xCoord = 100f,
-                yCoord = 100f,
-                confidence = 0.9f,
-                timestamp = 1234567890,
-                measurements = mapOf("diameter" to 5.0f)
-            ),
-            DetectedFeature(
-                id = 2,
-                detectionItemId = 1,
-                featureType = "type",
-                xCoord = 200f,
-                yCoord = 200f,
-                confidence = 0.9f,
-                timestamp = 1234567890,
-                measurements = mapOf("diameter" to 8.0f)
-            )
-        )
-    )
 }
