@@ -5,22 +5,21 @@ import edu.wpi.first.apriltag.AprilTagDetector
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 
-
 /**
- * AprilTagManager handles detection of AprilTags using WPILib and OpenCV.
- * It wraps the native detector and exposes structured results.
+ * AprilTagManager gestiona la detección de etiquetas AprilTag físicas
+ * y la generación de etiquetas virtuales para elementos detectados.
  */
 class AprilTagManager {
 
     /**
-     * Represents a detected AprilTag marker with metadata and geometry.
+     * Representa una etiqueta AprilTag (física o virtual) con metadatos y geometría.
      */
     data class Marker(
-        val id: Int,                      // Unique tag ID
-        val hamming: Int,                // Hamming error correction level
-        val decisionMargin: Float,       // Confidence score
-        val center: DoubleArray,         // [x, y] center coordinates
-        val corners: DoubleArray         // Flattened array of corner points
+        val id: Int,                      // ID único del tag
+        val hamming: Int,                // Nivel de corrección de errores
+        val decisionMargin: Float,       // Confianza de detección
+        val center: DoubleArray,         // Coordenadas [x, y] del centro
+        val corners: DoubleArray         // Coordenadas de las esquinas (plano 2D)
     ) {
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -45,23 +44,22 @@ class AprilTagManager {
         }
     }
 
-    // Detector configured with the tag36h11 family
+    // Detector nativo para etiquetas físicas (tag36h11)
     private val detector: AprilTagDetector = AprilTagDetector.Builder()
         .addFamily("tag36h11")
         .build()
 
     /**
-     * Optional initialization hook for future setup logic.
+     * Inicialización opcional para configuración futura.
      */
     fun init() {
-        // Placeholder for future initialization logic (e.g., logging, configuration)
+        // Placeholder para logs, configuración dinámica, etc.
     }
 
     /**
-     * Detects AprilTags in the given image and returns a list of structured markers.
+     * Detecta etiquetas físicas AprilTag en una imagen.
      */
     fun detectMarkers(image: Mat): List<Marker> {
-        // Convert image to grayscale if necessary
         val gray = Mat()
         if (image.channels() > 1) {
             Imgproc.cvtColor(image, gray, Imgproc.COLOR_BGR2GRAY)
@@ -69,11 +67,9 @@ class AprilTagManager {
             image.copyTo(gray)
         }
 
-        // Detect AprilTags using the native detector
         val detections = detector.detect(gray)
             .filterIsInstance<AprilTagDetection>()
 
-        // Map detections to Marker objects
         return detections.map { detection ->
             Marker(
                 id = detection.id,
@@ -86,8 +82,35 @@ class AprilTagManager {
     }
 
     /**
-     * Releases native resources held by the detector.
-     * Should be called when the manager is no longer needed.
+     * Genera una etiqueta virtual para un elemento detectado.
+     * @param featureId ID único del elemento
+     * @param position Coordenadas (x, y) del centro del elemento
+     * @param size Tamaño visual del tag (por defecto 20 px)
+     */
+    fun generateVirtualTagForFeature(
+        featureId: Int,
+        position: Pair<Double, Double>,
+        size: Double = 20.0
+    ): Marker {
+        val (x, y) = position
+        val half = size / 2.0
+
+        return Marker(
+            id = featureId,
+            hamming = 0,
+            decisionMargin = 1.0f,
+            center = doubleArrayOf(x, y),
+            corners = doubleArrayOf(
+                x - half, y - half,
+                x + half, y - half,
+                x + half, y + half,
+                x - half, y + half
+            )
+        )
+    }
+
+    /**
+     * Libera los recursos nativos del detector.
      */
     fun close() {
         detector.close()
