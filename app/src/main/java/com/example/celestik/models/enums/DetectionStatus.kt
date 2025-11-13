@@ -1,17 +1,26 @@
 package com.example.celestik.models.enums
 
 /**
- * Represents the technical status of a detection result based on dimensional validation.
- *
- * - OK: Feature is within tolerance and considered valid.
- * - WARNING: Feature is out of tolerance but not critical.
- * - NOT_ACCEPTED: Feature is invalid or represents a critical defect.
+ * Representa el estado técnico y lógico de una detección,
+ * considerando validación dimensional, análisis automático, revisión humana y evolución del defecto.
  */
 enum class DetectionStatus {
 
-    OK,           // 🟢 Valid — within tolerance
+    OK,                 // 🟢 Dentro de tolerancia, validado automáticamente
 
-    WARNING,      // 🟡 Warning — out of tolerance but not critical
+    WARNING,            // 🟡 Fuera de tolerancia leve, no crítico
 
-    NOT_ACCEPTED  // 🔴 Not accepted — invalid or critical defect
+    NOT_ACCEPTED,       // 🔴 Fuera de tolerancia grave o defecto crítico
+
+    CRITICAL,           // 🔴⚠️ Defecto grave que requiere parada o intervención inmediata
+
+    REVIEW,             // 🟠 Requiere revisión manual por técnico o IA no concluyente
+
+    REPAIRED,           // 🔵 Defecto corregido tras intervención
+
+    SKIPPED,            // ⚪ Detección omitida por configuración o exclusión
+
+    PREDICTED,          // 🧠 Estado inferido por modelo de IA (sin validación directa)
+
+    UNCERTAIN           // ❓ Estado no concluyente por baja confianza o ambigüedad
 }
