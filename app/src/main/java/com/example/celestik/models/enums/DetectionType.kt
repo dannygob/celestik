@@ -6,21 +6,26 @@ package com.example.celestik.models.enums
  */
 enum class DetectionType {
 
-    HOLE,                 // Detected hole in the material
+    HOLE,
+    NO_HOLE,
 
-    NO_HOLE,              // Expected hole is missing
+    COUNTERSINK,
+    NO_COUNTERSINK,
 
-    COUNTERSINK,          // Detected countersink (conical recess)
+    HALO,
+    NO_HALO,
 
-    NO_COUNTERSINK,       // Expected countersink is missing
+    BEND,
+    DEFECT,
 
-    HALO,                 // Detected halo or ring-like artifact
+    EDGE,               // Arista o borde detectado
+    CIRCLE,             // Círculo detectado por Hough
+    DEFORMATION,        // Deformación por Optical Flow
+    PATTERN_MATCH,      // Coincidencia por Template Matching
+    HALO_INNER,         // Halo interno
+    HALO_OUTER,         // Halo externo
+    SCRATCH,            // Rasguño o línea
+    BLOB,               // Masa o agrupación
 
-    NO_HALO,              // Expected halo is missing (e.g., in reflective validation)
-
-    BEND,                 // Detected curvature or deformation
-
-    DEFECT,               // General defect not covered by specific types
-
-    UNKNOWN               // Unclassified or unrecognized feature
+    UNKNOWN
 }
