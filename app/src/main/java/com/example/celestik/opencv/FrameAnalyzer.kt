@@ -1,26 +1,21 @@
 package com.example.celestik.opencv
 
+import android.graphics.Bitmap
 import android.util.Log
-import androidx.compose.ui.geometry.Size
-import com.example.celestik.manager.AprilTagManager
-import com.example.celestik.manager.ArUcoManager
-import com.example.celestik.viewmodel.SharedViewModel
-import com.google.android.libraries.mapsplatform.transportation.consumer.model.MarkerType
-import org.opencv.aruco.Aruco
+import com.example.celestik.SharedViewModel
+import com.example.celestik.models.calibration.MarkerType
+import com.example.celestik.opencv.managers.AprilTagManager
+import com.example.celestik.opencv.managers.ArUcoManager
+import org.opencv.android.Utils
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
 import org.opencv.video.Video
+import org.opencv.aruco.Aruco
 
-/**
- * Performs image analysis using OpenCV, including marker detection,
- * contour extraction, deformation analysis, and optical flow tracking.
- */
 class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
-    /** Represents a detected marker with its ID and corner matrix. */
     data class Marker(val id: Int, val corners: Mat)
 
-    /** Encapsulates the result of a frame analysis. */
     data class AnalysisResult(
         val contours: List<MatOfPoint>,
         val annotatedMat: Mat,
@@ -41,42 +36,51 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return mat
     }
 
-    /**
-     * Main analysis function that processes a frame and returns results.
-     */
     fun analyze(mat: Mat): AnalysisResult {
         val grayMat = Mat()
         val edges = Mat()
+        val thresholdedImage = Mat()
+        val watershedMarkers = Mat()
+        val holes = Mat()
 
         try {
-            // Preprocessing
             Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY)
-            Imgproc.GaussianBlur(grayMat, grayMat, Size(5.0F, 5.0F), 0.0)
+            Imgproc.GaussianBlur(grayMat, grayMat, Size(5.0, 5.0), 0.0)
 
-            val thresholdedImage = applyAdaptiveThresholding(grayMat)
-            val watershedMarkers = applyWatershed(thresholdedImage)
+            Imgproc.adaptiveThreshold(
+                grayMat,
+                thresholdedImage,
+                255.0,
+                Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
+                Imgproc.THRESH_BINARY,
+                11,
+                2.0
+            )
+
+            val markersMat = generateWatershedMarkers(thresholdedImage)
+            Imgproc.watershed(mat, markersMat)
+            watershedMarkers.setTo(Scalar(255.0), markersMat)
+
             val contours = findContours(watershedMarkers)
             val filteredContours = filterContours(contours, 100.0)
             val deformations = detectDeformations(filteredContours)
-            val holes = detectHoles(grayMat)
+            val detectedHoles = detectHoles(grayMat)
+            detectedHoles.copyTo(holes)
 
-            // Optical flow deformation tracking
             prevGrayMat?.let {
                 detectDeformationsWithOpticalFlow(it, grayMat)
-                // Optional: draw flowPoints or use them for motion analysis
             }
             prevGrayMat = grayMat.clone()
 
-            // Marker detection
             val markers = when (sharedViewModel.markerType.value) {
                 MarkerType.ARUCO -> arucoManager.detectMarkers(mat).map { Marker(it.id, it.corners) }
                 MarkerType.APRILTAG -> aprilTagManager.detectMarkers(mat).map { Marker(it.id, cornersToMat(it.corners)) }
             }
 
-            // Annotate result
             val annotatedMat = mat.clone()
             Imgproc.drawContours(annotatedMat, filteredContours, -1, Scalar(0.0, 255.0, 0.0), 2)
             Imgproc.drawContours(annotatedMat, deformations, -1, Scalar(255.0, 0.0, 0.0), 2)
+
             for (i in 0 until holes.cols()) {
                 val circle = holes.get(0, i)
                 val center = Point(circle[0], circle[1])
@@ -96,24 +100,43 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         } finally {
             grayMat.release()
             edges.release()
+            thresholdedImage.release()
+            watershedMarkers.release()
+            holes.release()
         }
     }
 
-    /** Applies Canny edge detection. */
+    private fun generateWatershedMarkers(binary: Mat): Mat {
+        val kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, Size(3.0, 3.0))
+        val sureBg = Mat()
+        Imgproc.dilate(binary, sureBg, kernel)
+
+        val distTransform = Mat()
+        Imgproc.distanceTransform(binary, distTransform, Imgproc.DIST_L2, 5)
+
+        val sureFg = Mat()
+        Imgproc.threshold(distTransform, sureFg, 0.7 * Core.minMaxLoc(distTransform).maxVal, 255.0, 0.0)
+
+        val unknown = Mat()
+        Core.subtract(sureBg, sureFg, unknown)
+
+        val markers = Mat()
+        sureFg.convertTo(markers, CvType.CV_32S)
+        return markers
+    }
+
     fun detectEdges(image: Mat): Mat {
         val edges = Mat()
         Imgproc.Canny(image, edges, 100.0, 200.0)
         return edges
     }
 
-    /** Applies camera calibration to remove lens distortion. */
     fun applyCalibration(image: Mat, cameraMatrix: Mat, distortionCoeffs: Mat): Mat {
         val undistortedImage = Mat()
         Imgproc.undistort(image, undistortedImage, cameraMatrix, distortionCoeffs)
         return undistortedImage
     }
 
-    /** Extracts width and height from contours. */
     fun extractDimensionsFromContours(contours: List<MatOfPoint>): List<Double> {
         val dimensions = mutableListOf<Double>()
         for (contour in contours) {
@@ -124,15 +147,14 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return dimensions
     }
 
-    /** Finds contours in a binary image. */
     private fun findContours(image: Mat): List<MatOfPoint> {
         val contours = ArrayList<MatOfPoint>()
         val hierarchy = Mat()
         Imgproc.findContours(image, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE)
+        hierarchy.release()
         return contours
     }
 
-    /** Detects circular holes using Hough transform. */
     fun detectHoles(image: Mat): Mat {
         val circles = Mat()
         Imgproc.HoughCircles(
@@ -149,7 +171,6 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return circles
     }
 
-    /** Detects deformations based on contour complexity. */
     fun detectDeformations(contours: List<MatOfPoint>): List<MatOfPoint> {
         val deformations = mutableListOf<MatOfPoint>()
         for (contour in contours) {
@@ -163,60 +184,32 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return deformations
     }
 
-    /** Applies adaptive thresholding for segmentation. */
-    fun applyAdaptiveThresholding(image: Mat): Mat {
-        val thresholdedImage = Mat()
-        Imgproc.adaptiveThreshold(
-            image,
-            thresholdedImage,
-            255.0,
-            Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
-            Imgproc.THRESH_BINARY,
-            11,
-            2.0
-        )
-        return thresholdedImage
-    }
-
-    /** Filters contours by minimum area. */
-    fun filterContours(contours: List<MatOfPoint>, minArea: Double): List<MatOfPoint> {
-        val filteredContours = mutableListOf<MatOfPoint>()
-        for (contour in contours) {
-            val area = Imgproc.contourArea(contour)
-            if (area > minArea) {
-                filteredContours.add(contour)
-            }
-        }
-        return filteredContours
-    }
-
-    /** Applies watershed segmentation. */
-    fun applyWatershed(image: Mat): Mat {
-        val markers = Mat()
-        Imgproc.connectedComponents(image, markers)
-        Imgproc.watershed(image, markers)
-        return markers
-    }
-
-    /** Detects countersinks using template matching. */
-    fun detectCountersinks(image: Mat, template: Mat): Mat {
+    fun detectCountersinks(image: Mat, template: Mat): Point? {
         val result = Mat()
         Imgproc.matchTemplate(image, template, result, Imgproc.TM_CCOEFF_NORMED)
-        return result
+        val mmr = Core.minMaxLoc(result)
+        return if (mmr.maxVal > 0.8) mmr.maxLoc else null
     }
 
-    /** Tracks motion between frames using optical flow. */
-    fun detectDeformationsWithOpticalFlow(prevFrame: Mat, nextFrame: Mat): MatOfPoint2f {
-        val prevPts: MatOfPoint2f = MatOfPoint2f()
-        Imgproc.goodFeaturesToTrack(prevFrame, prevPts, 100, 0.3, 7.0)
+    fun detectDeformationsWithOpticalFlow(prevFrame: Mat, nextFrame: Mat): List<Point> {
+        val prevGray = Mat()
+        val nextGray = Mat()
+        Imgproc.cvtColor(prevFrame, prevGray, Imgproc.COLOR_BGR2GRAY)
+        Imgproc.cvtColor(nextFrame, nextGray, Imgproc.COLOR_BGR2GRAY)
+
+        val features = MatOfPoint()
+        Imgproc.goodFeaturesToTrack(prevGray, features, 100, 0.3, 7.0)
+
+        val prevPts = MatOfPoint2f(*features.toArray())
         val nextPts = MatOfPoint2f()
         val status = MatOfByte()
         val err = MatOfFloat()
-        Video.calcOpticalFlowPyrLK(prevFrame, nextFrame, prevPts, nextPts, status, err)
-        return nextPts
+
+        Video.calcOpticalFlowPyrLK(prevGray, nextGray, prevPts, nextPts, status, err)
+
+        return nextPts.toArray().toList()
     }
 
-    /** Converts contour dimensions to real-world measurements. */
     fun calculateMeasurements(contours: List<MatOfPoint>, scale: Double): List<Double> {
         val measurements = mutableListOf<Double>()
         for (contour in contours) {
