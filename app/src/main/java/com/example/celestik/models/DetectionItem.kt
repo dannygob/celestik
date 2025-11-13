@@ -7,12 +7,13 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
+import com.example.celestik.models.enums.MeasurementUnit
 import com.example.celestik.models.geometry.BoundingBox
 import kotlinx.parcelize.Parcelize
 
 /**
- * Represents a single detection result within an inspection session.
- * Linked to an Inspection entity and includes metadata such as type, confidence, and measurements.
+ * Representa un resultado de detección dentro de una sesión de inspección.
+ * Incluye metadatos técnicos, medidas, trazabilidad y método de análisis.
  */
 @Parcelize
 @Entity(
@@ -28,61 +29,48 @@ import kotlinx.parcelize.Parcelize
 )
 data class DetectionItem(
 
-    /**
-     * Auto-generated primary key for Room.
-     */
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
-    /**
-     * Foreign key linking to the parent inspection session.
-     */
     val inspectionId: Long,
 
-    /**
-     * Identifier of the frame or image where the detection occurred.
-     */
     val frameId: String,
 
-    /**
-     * Type of feature detected (e.g., HOLE, NO_HALO).
-     */
     val type: DetectionType,
 
-    /**
-     * Bounding box of the detected feature in image coordinates.
-     */
     @Embedded
     val boundingBox: BoundingBox,
 
-    /**
-     * Confidence score of the detection (range: 0.0 to 1.0).
-     */
     val confidence: Float,
 
-    /**
-     * Technical status of the detection (e.g., OK, WARNING, NOT_ACCEPTED).
-     */
     val status: DetectionStatus,
 
     /**
-     * Optional measurement in millimeters, if applicable.
+     * Conjunto de medidas técnicas asociadas a la detección.
+     * Ejemplo: diámetro, profundidad, ángulo, radios, etc.
      */
-    val measurementMm: Float? = null,
+    @Embedded
+    val measurements: MeasurementSet? = null,
 
     /**
-     * Timestamp of detection in epoch milliseconds.
+     * Unidad de medida utilizada (mm, pulgadas, etc.).
      */
+    val unit: MeasurementUnit = MeasurementUnit.MM,
+
     val timestamp: Long,
 
-    /**
-     * Optional QR code linked to the detection (e.g., part ID or traceability).
-     */
     val linkedQrCode: String? = null,
 
+    val notes: String = "",
+
     /**
-     * Optional notes or annotations related to the detection.
+     * Método de detección utilizado (Watershed, OpticalFlow, TemplateMatching, etc.).
      */
-    val notes: String = ""
+    val detectionMethod: String? = null,
+
+    /**
+     * Ruta de imagen procesada o miniatura asociada.
+     */
+    val imagePath: String? = null
 
 ) : Parcelable
