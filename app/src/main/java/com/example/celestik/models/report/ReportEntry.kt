@@ -2,66 +2,56 @@ package com.example.celestik.models.report
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
+import com.example.celestik.models.MeasurementSet
 import kotlinx.parcelize.Parcelize
 
 /**
- * Represents a single entry in an inspection history or generated report.
- * Captures detection metadata, classification, confidence, and optional measurements.
+ * Representa una entrada individual en el historial de inspección o en un reporte generado.
+ * Captura metadatos de detección, clasificación, confianza, medidas y trazabilidad visual.
  */
 @Parcelize
 @Entity(tableName = "report_entries")
 data class ReportEntry(
 
-    /**
-     * Auto-generated primary key for Room.
-     */
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
-    /**
-     * Identifier of the frame or image where the detection occurred.
-     */
     @ColumnInfo(name = "frame_id")
     val frameId: String,
 
-    /**
-     * Timestamp of the detection in epoch milliseconds.
-     */
     @ColumnInfo(name = "timestamp")
     val timestamp: Long,
 
-    /**
-     * Type of feature detected (e.g., HOLE, BEND, NO_HALO).
-     */
     @ColumnInfo(name = "detected_type")
     val type: DetectionType,
 
-    /**
-     * Technical status of the detection (e.g., OK, WARNING, NOT_ACCEPTED).
-     */
     @ColumnInfo(name = "status")
     val status: DetectionStatus,
 
-    /**
-     * Confidence score of the detection (range: 0.0 to 1.0).
-     */
     @ColumnInfo(name = "confidence")
     val confidence: Float,
 
-    /**
-     * Optional measurement in millimeters, if applicable.
-     */
-    @ColumnInfo(name = "measurement_mm")
-    val measurementMm: Float?,
+    @Embedded
+    val measurements: MeasurementSet? = null,
 
-    /**
-     * Optional notes or annotations related to the detection.
-     */
     @ColumnInfo(name = "notes")
-    val notes: String = ""
+    val notes: String = "",
+
+    @ColumnInfo(name = "image_path")
+    val imagePath: String? = null,
+
+    @ColumnInfo(name = "x_coord")
+    val xCoord: Float? = null,
+
+    @ColumnInfo(name = "y_coord")
+    val yCoord: Float? = null,
+
+    @ColumnInfo(name = "detection_method")
+    val detectionMethod: String? = null
 
 ) : Parcelable
