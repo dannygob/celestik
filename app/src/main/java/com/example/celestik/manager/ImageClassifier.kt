@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.scale
-import androidx.room.jarjarred.org.antlr.v4.gui.Interpreter
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
 import java.nio.ByteBuffer
@@ -32,8 +31,12 @@ class ImageClassifier(context: Context) {
         val fileChannel = inputStream.channel
         val startOffset = assetFileDescriptor.startOffset
         val declaredLength = assetFileDescriptor.declaredLength
-        val modelBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-        interpreter = Interpreter(modelBuffer as Array<out String?>?)
+        val modelBuffer: ByteBuffer =
+            fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+
+        // ** FIX IS HERE **
+        // Pass the ByteBuffer directly without any casting.
+        interpreter = Interpreter(modelBuffer)
     }
 
     /**

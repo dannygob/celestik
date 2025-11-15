@@ -4,7 +4,15 @@ import android.graphics.Bitmap
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import org.opencv.android.Utils
-import org.opencv.core.*
+import org.opencv.core.Core
+import org.opencv.core.CvType
+import org.opencv.core.Mat
+import org.opencv.core.MatOfByte
+import org.opencv.core.MatOfFloat
+import org.opencv.core.MatOfPoint
+import org.opencv.core.MatOfPoint2f
+import org.opencv.core.Point
+import org.opencv.core.Size
 import org.opencv.imgproc.Imgproc
 import org.opencv.video.Video
 
@@ -62,7 +70,7 @@ fun generateWatershedMarkers(binary: Mat): Mat {
     Imgproc.distanceTransform(binary, distTransform, Imgproc.DIST_L2, 5)
 
     val sureFg = Mat()
-    Imgproc.threshold(distTransform, sureFg, 0.7 * Core.minMaxLoc(distTransform).maxVal, 255.0, 0.0)
+    Imgproc.threshold(distTransform, sureFg, 0.7 * Core.minMaxLoc(distTransform).maxVal, 255.0, 0)
 
     val unknown = Mat()
     Core.subtract(sureBg, sureFg, unknown)

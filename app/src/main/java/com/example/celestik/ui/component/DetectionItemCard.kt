@@ -1,6 +1,10 @@
 package com.example.celestik.ui.component
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +36,7 @@ fun DetectionItemCard(item: DetectionItem) {
             Spacer(modifier = Modifier.height(8.dp))
             Text("Status: ${item.status}")
             Spacer(modifier = Modifier.height(8.dp))
-            item.measurementMm?.let {
+            item.measurements.let {
                 Text("Measurement: $it mm")
             }
         }
@@ -51,7 +55,7 @@ fun DetectionItemCardPreview() {
             boundingBox = BoundingBox(0f, 0f, 0f, 0f),
             confidence = 0.9f,
             status = DetectionStatus.OK,
-            measurementMm = 10f,
+            measurements = 10f,
             timestamp = 1234567890,
             linkedQrCode = "qr1",
             notes = "notes1"

@@ -22,13 +22,13 @@ fun DetectionItemPreview() {
         boundingBox = BoundingBox(12f, 34f, 56f, 78f),
         confidence = 0.88f,
         status = DetectionStatus.WARNING,
-        measurementMm = 4.2f,
+        measurements = 4.2f,
         timestamp = System.currentTimeMillis(),
         linkedQrCode = "QR-L123",
         notes = "Preview de prueba"
     )
 
-    Text(text = "⚙️ Preview: ${item.type} - ${item.measurementMm} mm - ${item.status}")
+    Text(text = "⚙️ Preview: ${item.type} - ${item.measurements} mm - ${item.status}")
 }
 
 @Preview(showBackground = true)

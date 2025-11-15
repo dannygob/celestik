@@ -4,6 +4,7 @@ package com.example.celestik.navigation
 import DashboardScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,7 +26,7 @@ import com.example.celestik.ui.screen.StatusScreen
  * Maps route constants to screen composables and injects dependencies as needed.
  */
 @Composable
-fun NavigationGraph(navController: NavHostController) {
+fun NavigationGraph(navController: NavHostController, modifier: Modifier) {
     // Instance of AprilTag detector used in CameraScreen
     val aprilTagManager = remember { AprilTagManager().apply { init() } }
 

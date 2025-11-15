@@ -1,9 +1,11 @@
 package com.example.celestik.manager
 
+
 import edu.wpi.first.apriltag.AprilTagDetection
 import edu.wpi.first.apriltag.AprilTagDetector
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
+
 
 /**
  * AprilTagManager gestiona la detección de etiquetas AprilTag físicas
@@ -45,7 +47,7 @@ class AprilTagManager {
     }
 
     // Detector nativo para etiquetas físicas (tag36h11)
-    private val detector: AprilTagDetector = AprilTagDetector.Builder()
+    private val detector: AprilTagDetector = AprilTagDetector.Builder
         .addFamily("tag36h11")
         .build()
 

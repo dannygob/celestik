@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import com.example.celestik.manager.AprilTagManager
 import com.example.celestik.opencv.FrameAnalyzer
 import com.example.celestik.utils.matToImageBitmap
-import com.example.celestik.viewmodel.CameraViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.launch

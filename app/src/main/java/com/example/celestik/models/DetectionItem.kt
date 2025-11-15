@@ -50,7 +50,7 @@ data class DetectionItem(
      * Ejemplo: diámetro, profundidad, ángulo, radios, etc.
      */
     @Embedded
-    val measurements: MeasurementSet? = null,
+    val measurements: Float = null,
 
     /**
      * Unidad de medida utilizada (mm, pulgadas, etc.).
@@ -71,6 +71,6 @@ data class DetectionItem(
     /**
      * Ruta de imagen procesada o miniatura asociada.
      */
-    val imagePath: String? = null
+    val imagePath: String? = null,
 
-) : Parcelable
+    ) : Parcelable

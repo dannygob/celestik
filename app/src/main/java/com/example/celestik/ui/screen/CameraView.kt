@@ -1,3 +1,4 @@
+import android.Manifest
 import android.content.pm.PackageManager
 import android.util.Log
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.celestik.opencv.OpenCVInitializer
 import com.example.celestik.viewmodel.MainViewModel
 import java.util.concurrent.Executors
-import java.util.jar.Manifest
+
 
 /**
  * Displays a camera preview and performs real-time image classification.

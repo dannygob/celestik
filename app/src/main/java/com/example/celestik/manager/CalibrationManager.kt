@@ -5,9 +5,9 @@ import android.util.Log
 import org.json.JSONArray
 import org.json.JSONObject
 import org.opencv.aruco.Aruco
-import org.opencv.aruco.CharucoBoard
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
+import org.opencv.objdetect.CharucoBoard
 import java.io.File
 import java.io.FileInputStream
 import java.text.SimpleDateFormat

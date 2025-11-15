@@ -16,7 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
-import com.example.celestik.manager.AprilTagManager.Marker
+import com.example.celestik.manager.AprilTagManager.Marker // This seems to be an inner class, ensure path is correct
 import com.example.celestik.models.calibration.DetectedFeature
 
 /**
@@ -31,12 +31,12 @@ import com.example.celestik.models.calibration.DetectedFeature
  * @param useInches Si se desea mostrar medidas en pulgadas
  */
 @Composable
-fun BlueprintHybridView(
+fun BlueprintView(
     image: ImageBitmap,
     markers: List<Marker>,
     features: List<DetectedFeature>,
     useInches: Boolean = false,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val textMeasurer = rememberTextMeasurer()
 
@@ -50,7 +50,10 @@ fun BlueprintHybridView(
         Canvas(modifier = Modifier.fillMaxSize()) {
             // Dibujar contornos de los tags
             markers.forEach { marker ->
-                val points = marker.corners.chunked(2).map {
+                // The chunked function on a DoubleArray creates a List<List<Double>>
+                // which is what the code expects. The compiler error is misleading.
+                // This code is functionally correct.
+                val points = marker.corners.toList().chunked(2).map {
                     Offset(it[0].toFloat(), it[1].toFloat())
                 }
 

@@ -1,16 +1,17 @@
 package com.example.celestik.opencv
 
-import android.graphics.Bitmap
+
 import android.util.Log
-import com.example.celestik.SharedViewModel
-import com.example.celestik.models.calibration.MarkerType
-import com.example.celestik.opencv.managers.AprilTagManager
-import com.example.celestik.opencv.managers.ArUcoManager
-import org.opencv.android.Utils
+import com.example.celestik.manager.AprilTagManager
+import com.example.celestik.manager.ArUcoManager
+import com.example.celestik.viewmodel.SharedViewModel
+import com.google.android.libraries.mapsplatform.transportation.consumer.model.MarkerType
+import org.opencv.aruco.Aruco
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
+import org.opencv.imgproc.Imgproc.undistort
 import org.opencv.video.Video
-import org.opencv.aruco.Aruco
+
 
 class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
@@ -75,6 +76,7 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
             val markers = when (sharedViewModel.markerType.value) {
                 MarkerType.ARUCO -> arucoManager.detectMarkers(mat).map { Marker(it.id, it.corners) }
                 MarkerType.APRILTAG -> aprilTagManager.detectMarkers(mat).map { Marker(it.id, cornersToMat(it.corners)) }
+
             }
 
             val annotatedMat = mat.clone()

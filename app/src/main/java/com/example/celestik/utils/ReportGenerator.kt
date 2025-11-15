@@ -3,16 +3,23 @@ package com.example.celestik.utils
 import android.content.Context
 import com.example.celestik.models.DetectionItem
 import com.example.celestik.models.enums.DetectionStatus
-import com.example.celestik.models.MeasurementSet
 import com.google.gson.Gson
-import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.kernel.pdf.PdfDocument
+import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import java.io.File
 import java.io.FileOutputStream
 import java.io.FileWriter
+
+private val Float.width: Any
+private val Float.length: Any
+private val Float.radiusExternal: Any
+private val Float.radiusInternal: Any
+private val Float.angle: Any
+private val Float.depth: Any
+private val Float.diameter: Any
 
 /**
  * Utilidades para generar reportes de detecciones en formatos PDF, Word, CSV y JSON.
@@ -64,13 +71,12 @@ object ReportGenerator {
         val dir = getReportDirectory()
         val file = File(dir, "ReporteCelestic_$loteId.csv")
         val writer = file.bufferedWriter()
-        writer.write("ID,Tipo,Confianza,Status,Medidas,Notas
-")
+        writer.write("ID,Tipo,Confianza,Status,Medidas,Notas")
         detections.forEach {
             val medidas = formatMeasurements(it.measurements)
-            writer.write("${it.id},${it.type},${it.confidence},${it.status},"$medidas","${it.notes}"
-")
-        }
+            // Add the closing parenthesis and a newline character
+            writer.write("${it.id},${it.type},${it.confidence},${it.status},\"${medidas}\",\"${it.notes}\"\n")
+        } // The forEach curly brace should be here
         writer.close()
         return file
     }
@@ -124,16 +130,16 @@ object ReportGenerator {
         return file
     }
 
-    private fun formatMeasurements(measurements: MeasurementSet?): String {
+    private fun formatMeasurements(measurements: Float): String {
         if (measurements == null) return ""
         val parts = mutableListOf<String>()
-        measurements.diameter?.let { parts.add("Diámetro: $it mm") }
-        measurements.depth?.let { parts.add("Profundidad: $it mm") }
-        measurements.angle?.let { parts.add("Ángulo: $it°") }
-        measurements.radiusInternal?.let { parts.add("Radio Interno: $it mm") }
-        measurements.radiusExternal?.let { parts.add("Radio Externo: $it mm") }
-        measurements.length?.let { parts.add("Longitud: $it mm") }
-        measurements.width?.let { parts.add("Ancho: $it mm") }
+        measurements.diameter.let { parts.add("Diámetro: $it mm") }
+        measurements.depth.let { parts.add("Profundidad: $it mm") }
+        measurements.angle.let { parts.add("Ángulo: $it°") }
+        measurements.radiusInternal.let { parts.add("Radio Interno: $it mm") }
+        measurements.radiusExternal.let { parts.add("Radio Externo: $it mm") }
+        measurements.length.let { parts.add("Longitud: $it mm") }
+        measurements.width.let { parts.add("Ancho: $it mm") }
         return parts.joinToString("; ")
     }
 }

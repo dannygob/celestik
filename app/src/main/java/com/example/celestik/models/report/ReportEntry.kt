@@ -1,14 +1,16 @@
 package com.example.celestik.models.report
 
+
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.celestik.models.MeasurementSet
 import com.example.celestik.models.enums.DetectionStatus
 import com.example.celestik.models.enums.DetectionType
-import com.example.celestik.models.MeasurementSet
 import kotlinx.parcelize.Parcelize
+
 
 /**
  * Representa una entrada individual en el historial de inspección o en un reporte generado.
@@ -52,6 +54,13 @@ data class ReportEntry(
     val yCoord: Float? = null,
 
     @ColumnInfo(name = "detection_method")
-    val detectionMethod: String? = null
+    val detectionMethod: String? = null,
 
-) : Parcelable
+
+    ) : Parcelable {
+    // You must also define the parceler objects here
+    companion object {
+        private val DetectionTypeParceler = parceler<DetectionType>()
+        private val StatusTypeParceler = parceler<DetectionStatus>()
+    }
+}
