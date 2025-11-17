@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -17,8 +19,19 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Enable native build with CMake
+        externalNativeBuild {
+            cmake {
+                cppFlags += "-std=c++11"
+            }
+        }
+
+        // Specify ABI for native libraries
+        ndk {
+            abiFilters += listOf("arm64-v8a")
+        }
     }
 
     buildTypes {
@@ -44,6 +57,14 @@ android {
     buildFeatures {
         compose = true
     }
+
+    // Link to CMake build script
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1" // Adjust to your installed version
+        }
+    }
 }
 
 kotlin {
@@ -51,7 +72,6 @@ kotlin {
 }
 
 dependencies {
-
     // CORE / ANDROIDX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -83,15 +103,15 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     kapt(libs.hilt.android.compiler)
 
-    // CAMERA / MEDIA (UNIFICADO EN CameraX 1.5.1)
+    // CAMERA / MEDIA
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.camera2)
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
 
-    // FIREBASE / GOOGLE=
-    implementation(libs.google.firebase.auth.ktx) // Use the latest version
+    // FIREBASE / GOOGLE
+    implementation(libs.google.firebase.auth.ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics.buildtools)
@@ -99,7 +119,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.litert)
 
-    // OTROS / UTILIDADES
+    // UTILITIES
     implementation(libs.shimmer)
     implementation(libs.poi.ooxml)
     implementation(libs.apriltag.java)
@@ -114,7 +134,8 @@ dependencies {
 
     implementation(libs.kernel)
     implementation(libs.layout)
+    implementation(libs.tensorflow.lite)
 
-    implementation("org.tensorflow:tensorflow-lite:2.15.0")
-
+    // OpenCV native bindings
+    implementation(files("libs/opencv-4120.jar"))
 }
