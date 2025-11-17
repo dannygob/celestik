@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.implementation
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,16 +19,16 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Enable native build with CMake
+        // ✅ Configurar compilación nativa con CMake
         externalNativeBuild {
             cmake {
                 cppFlags += "-std=c++11"
             }
         }
 
-        // Specify ABI for native libraries
+        // ✅ ABI para librerías nativas
         ndk {
-            abiFilters += listOf("arm64-v8a")
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }
     }
 
@@ -58,13 +56,16 @@ android {
         compose = true
     }
 
-    // Link to CMake build script
+    // ✅ Enlazar con CMake
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1" // Adjust to your installed version
+            version = "3.22.1"
         }
     }
+
+    // ✅ Incluir jniLibs para .so precompilados
+    sourceSets["main"].jniLibs.srcDirs("src/main/jniLibs")
 }
 
 kotlin {
@@ -136,6 +137,6 @@ dependencies {
     implementation(libs.layout)
     implementation(libs.tensorflow.lite)
 
-    // OpenCV native bindings
+    // ✅ OpenCV Java bindings (JAR)
     implementation(files("libs/opencv-4120.jar"))
 }

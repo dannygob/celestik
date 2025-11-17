@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">celestik</string>
-    <string name="toastReportRequest">toaastReportRequest</string>
+    <!-- Nombre de la app -->
+    <string name="app_name">Celestik</string>
+
+    <!-- Texto para el Toast al enviar reporte -->
+    <string name="toast_report_request">Report sent successfully</string>
+
+    <!-- Texto para botón de retroceso -->
     <string name="back">Back</string>
 </resources>
