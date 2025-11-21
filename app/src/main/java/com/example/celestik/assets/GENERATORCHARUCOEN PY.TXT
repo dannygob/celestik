@@ -1,0 +1,124 @@
+import cv2
+from cv2 import aruco
+import numpy as np
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import A1, A2, A3, A4, LETTER, LEGAL
+from PIL import Image
+
+
+# ========================================================
+# 1) FORMATS DISPONIBLES (en puntos PDF)
+# ========================================================
+FORMATOS = {
+    "A1": A1,
+    "A2": A2,
+    "A3": A3,
+    "A4": A4,
+    "Carta": LETTER,
+    "Legal": LEGAL,
+}
+
+
+def generar_charuco_con_aruco(
+        formato="A3",
+        dpi=300,
+        charuco_cols=11,
+        charuco_rows=7,
+        square_length_mm=40,
+        marker_length_mm=30,
+        aruco_extra_id=23,
+        aruco_extra_mm=40,
+        output_prefix="charuco"
+):
+    # ----------------------------------------------------
+    # 2) RESOLVER TAMAÑO DEL FORMATO ELEGIDO
+    # ----------------------------------------------------
+    if formato in FORMATOS:
+        pdf_width_pt, pdf_height_pt = FORMATOS[formato]
+    else:
+        raise ValueError("Formato no reconocido. Usa: A1, A2, A3, A4, Carta, Legal.")
+
+    # Convertir tamaño del PDF en milímetros
+    pdf_width_mm = pdf_width_pt / mm
+    pdf_height_mm = pdf_height_pt / mm
+
+    # Convertir tamaño del PDF a píxeles según DPI
+    img_width_px = int(pdf_width_mm / 25.4 * dpi)   # mm → inch → px
+    img_height_px = int(pdf_height_mm / 25.4 * dpi)
+
+    print(f"Formato {formato}: {pdf_width_mm:.2f}mm × {pdf_height_mm:.2f}mm")
+    print(f"Tamaño PNG: {img_width_px} × {img_height_px} px @ {dpi} dpi")
+
+    # ----------------------------------------------------
+    # 3) CREAR TABLERO CHARUCO
+    # ----------------------------------------------------
+    aruco_dict = aruco.getPredefinedDictionary(aruco.DICT_5X5_1000)
+
+    board = aruco.CharucoBoard_create(
+        charuco_cols,
+        charuco_rows,
+        square_length_mm / 1000.0,  # mm → metros
+        marker_length_mm / 1000.0,
+        aruco_dict
+    )
+
+    # Generar imagen del tablero
+    img = board.draw((img_width_px, img_height_px))
+
+    # ----------------------------------------------------
+    # 4) AGREGAR ARUCO EXTRA (interno)
+    # ----------------------------------------------------
+    aruco_extra_px = int(aruco_extra_mm / 25.4 * dpi)
+
+    aruco_marker = aruco.drawMarker(aruco_dict, aruco_extra_id, aruco_extra_px)
+
+    # Colocar el ArUco extra en el centro
+    x = img_width_px // 2 - aruco_extra_px // 2
+    y = img_height_px // 2 - aruco_extra_px // 2
+    img[y:y+aruco_extra_px, x:x+aruco_extra_px] = aruco_marker
+
+    # ----------------------------------------------------
+    # 5) GUARDAR PNG
+    # ----------------------------------------------------
+    png_filename = f"{output_prefix}_{formato}.png"
+    cv2.imwrite(png_filename, img)
+    print(f"PNG generado: {png_filename}")
+
+    # ----------------------------------------------------
+    # 6) CREAR PDF EXACTO AL TAMAÑO ELIIGDO
+    # ----------------------------------------------------
+    pdf_filename = f"{output_prefix}_{formato}.pdf"
+    
+    c = canvas.Canvas(pdf_filename, pagesize=(pdf_width_pt, pdf_height_pt))
+
+    # Insertar imagen ajustada a toda la página
+    c.drawImage(
+        png_filename,
+        0,
+        0,
+        width=pdf_width_pt,
+        height=pdf_height_pt
+    )
+
+    c.save()
+    print(f"PDF generado: {pdf_filename}")
+
+    return png_filename, pdf_filename
+
+
+# ========================================================
+# EJEMPLO DE USO
+# ========================================================
+if __name__ == "__main__":
+    generar_charuco_con_aruco(
+        formato="A3",       # El usuario puede cambiar por A1, A2, A4, Carta, Legal
+        dpi=300,
+        charuco_cols=11,
+        charuco_rows=7,
+        square_length_mm=40,
+        marker_length_mm=30,
+        aruco_extra_id=23,
+        aruco_extra_mm=40,
+        output_prefix="charuco_master"
+    )
