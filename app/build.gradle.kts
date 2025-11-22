@@ -1,8 +1,11 @@
 plugins {
+    // Android and Kotlin plugins
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt.android)
+
+    // Kotlin annotation processing and parcelize support
     id("kotlin-kapt")
     id("kotlin-parcelize")
 }
@@ -19,14 +22,14 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // ✅ Configurar compilación nativa con CMake
+        // ✅ Native build configuration with CMake
         externalNativeBuild {
             cmake {
                 cppFlags += "-std=c++11"
             }
         }
 
-        // ✅ ABI para librerías nativas
+        // ✅ ABI filters for native libraries
         ndk {
             abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }
@@ -42,21 +45,24 @@ android {
         }
     }
 
+    // ✅ Java compatibility settings
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    // ✅ Kotlin compiler options
     kotlinOptions {
         jvmTarget = "17"
         languageVersion = "1.9"
     }
 
+    // ✅ Enable Jetpack Compose
     buildFeatures {
         compose = true
     }
 
-    // ✅ Enlazar con CMake
+    // ✅ Link with CMake (only needed if you add native code later)
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
@@ -64,10 +70,11 @@ android {
         }
     }
 
-    // ✅ Incluir jniLibs para .so precompilados
+    // ✅ Include precompiled .so libraries from jniLibs
     sourceSets["main"].jniLibs.srcDirs("src/main/jniLibs")
 }
 
+// ✅ Kotlin toolchain configuration
 kotlin {
     jvmToolchain(21)
 }
@@ -124,7 +131,6 @@ dependencies {
     implementation(libs.shimmer)
     implementation(libs.poi.ooxml)
     implementation(libs.apriltag.java)
-    implementation(project(":openCv"))
 
     // TESTING
     testImplementation(libs.junit)
@@ -137,6 +143,6 @@ dependencies {
     implementation(libs.layout)
     implementation(libs.tensorflow.lite)
 
-    // ✅ OpenCV Java bindings (JAR)
+    // ✅ OpenCV Java bindings (JAR only, no module reference)
     implementation(files("libs/opencv-4120.jar"))
 }

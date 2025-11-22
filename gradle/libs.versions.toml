@@ -35,14 +35,14 @@ litert = "2.0.3"
 protoliteWellKnownTypes = "18.0.1"
 transportationConsumer = "4.0.0"
 
-# --- HILT / INYECCIÓN ---
+# --- HILT / DEPENDENCY INJECTION ---
 hilt = "2.57.2"
 
 # --- NAVIGATION ---
 navigationCompose = "2.9.6"
 navigationRuntimeAndroid = "2.9.6"
 
-# --- OTROS / UTILIDADES / PRUEBAS ---
+# --- OTHER / UTILITIES / TESTING ---
 apriltag = "2025.3.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -74,7 +74,11 @@ androidx_ui_test_junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx_ui_test_manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx_ui_tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx_ui_tooling_preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+
+# Firebase Auth (explicit version reference)
 google-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtxVersion" }
+
+# Other utilities
 kernel = { module = "com.itextpdf:kernel", version.ref = "kernel" }
 layout = { module = "com.itextpdf:layout", version.ref = "layout" }
 material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
@@ -96,7 +100,7 @@ litert = { group = "com.google.ai.edge.litert", name = "litert", version.ref = "
 protolite-well-known-types = { group = "com.google.firebase", name = "protolite-well-known-types", version.ref = "protoliteWellKnownTypes" }
 transportation-consumer = { group = "com.google.android.libraries.mapsplatform.transportation", name = "transportation-consumer", version.ref = "transportationConsumer" }
 
-# --- HILT / INYECCIÓN ---
+# --- HILT / DEPENDENCY INJECTION ---
 androidx_hilt_navigation_compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.3.0" }
 hilt_android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt_android_compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -105,13 +109,12 @@ hilt_android_compiler = { group = "com.google.dagger", name = "hilt-android-comp
 androidx_navigation_compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx_navigation_runtime_android = { group = "androidx.navigation", name = "navigation-runtime-android", version.ref = "navigationRuntimeAndroid" }
 
-# --- OTROS / UTILIDADES / PRUEBAS ---
+# --- OTHER / UTILITIES / TESTING ---
 androidx_espresso_core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx_junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 apriltag_java = { group = "edu.wpi.first.apriltag", name = "apriltag-java", version.ref = "apriltag" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 poi_ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
-
 
 [plugins]
 
@@ -121,5 +124,5 @@ kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin_compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "composeCompiler" }
 kotlin_kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 
-# --- HILT / INYECCIÓN ---
+# --- HILT / DEPENDENCY INJECTION ---
 dagger_hilt_android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
