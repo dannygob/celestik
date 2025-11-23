@@ -51,10 +51,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // ✅ Kotlin compiler options
-    kotlinOptions {
-        jvmTarget = "17"
-        languageVersion = "1.9"
+    // ✅ Modern Kotlin compiler options (replaces deprecated kotlinOptions)
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+            languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_1_9)
+        }
     }
 
     // ✅ Enable Jetpack Compose
