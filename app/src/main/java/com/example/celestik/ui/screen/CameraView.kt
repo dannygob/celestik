@@ -1,83 +1,81 @@
-import android.Manifest
-import android.content.pm.PackageManager
-import android.util.Log
+package com.example.celestik.ui.screen
+
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.celestik.opencv.OpenCVInitializer
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.example.celestik.opencv.FrameAnalyzer
 import com.example.celestik.viewmodel.MainViewModel
+import org.opencv.core.CvType
+import org.opencv.core.Mat
 import java.util.concurrent.Executors
 
-
-/**
- * Displays a camera preview and performs real-time image classification.
- * Initializes OpenCV and handles camera permission checks.
- *
- * @param viewModel ViewModel for storing classification results.
- * @param modifier Optional layout modifier.
- */
 @Composable
 fun CameraView(
-    viewModel: MainViewModel = viewModel(),
+    viewModel: MainViewModel,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
+    LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     val cameraExecutor = remember { Executors.newSingleThreadExecutor() }
-    var permissionGranted by remember { mutableStateOf(false) }
+    val frameAnalyzer = remember { FrameAnalyzer(viewModel.sharedViewModel) }
 
-    LaunchedEffect(Unit) {
-        permissionGranted = ContextCompat.checkSelfPermission(
-            context, Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+    AndroidView(
+        factory = { ctx ->
+            PreviewView(ctx).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                val cameraProviderFuture = ProcessCameraProvider.getInstance(ctx)
+                cameraProviderFuture.addListener({
+                    val cameraProvider = cameraProviderFuture.get()
+                    val preview = Preview.Builder().build()
+                        .also { it.surfaceProvider = this.surfaceProvider }
+                    val imageAnalysis = ImageAnalysis.Builder()
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+                        .build()
 
-        if (!permissionGranted) {
-            Log.e("CameraView", "Camera permission not granted.")
-        }
-
-        val success = OpenCVInitializer.initOpenCV(context)
-        if (!success) Log.e("CameraView", "Failed to initialize OpenCV")
-    }
+                    imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+                        try {
+                            val buffer = imageProxy.planes[0].buffer
+                            val rgbaMat = Mat(imageProxy.height, imageProxy.width, CvType.CV_8UC4)
+                            val data = ByteArray(buffer.remaining())
+                            buffer.get(data)
+                            rgbaMat.put(0, 0, data)
+                            frameAnalyzer.analyze(rgbaMat)
+                            rgbaMat.release()
+                        } finally {
+                            imageProxy.close()
+                        }
+                    }
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        CameraSelector.DEFAULT_BACK_CAMERA,
+                        preview,
+                        imageAnalysis
+                    )
+                }, ContextCompat.getMainExecutor(ctx))
+            }
+        },
+        modifier = modifier.fillMaxSize()
+    )
 
     DisposableEffect(Unit) {
         onDispose { cameraExecutor.shutdown() }
-    }
-
-    if (!permissionGranted) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Camera permission not granted.")
-        }
-        return
-    }
-
-    Box(modifier = modifier.fillMaxSize()) {
-        AndroidView(
-            factory = { ctx ->
-                PreviewView(ctx).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                }.also { previewView ->
-                    startCamera(ctx, previewView, cameraExecutor, viewModel)
-                }
-            },
-            modifier = Modifier.fillMaxSize()
-        )
     }
 }
