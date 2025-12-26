@@ -5,9 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt.android)
 
-    // Kotlin annotation processing and parcelize support
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
+    // Kotlin annotation processing and parcelize support (usando alias del TOML)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -29,9 +29,9 @@ android {
             }
         }
 
-        // ✅ ABI filters for native libraries
+        // ✅ ABI filters for native libraries (incluye ChromeOS)
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
         }
     }
 
@@ -51,11 +51,11 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    // ✅ Modern Kotlin compiler options (replaces deprecated kotlinOptions)
+    // ✅ Modern Kotlin compiler options (sin deprecated)
     kotlin {
         compilerOptions {
             jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
-            languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_1_9)
+            languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
         }
     }
 
@@ -64,7 +64,7 @@ android {
         compose = true
     }
 
-    // ✅ Link with CMake (only needed if you add native code later)
+    // ✅ Link with CMake
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
@@ -120,8 +120,7 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.extensions)
 
-    // FIREBASE / GOOGLE
-    implementation(libs.google.firebase.auth.ktx)
+    // FIREBASE / GOOGLE (unificado: usa solo firebase_auth_ktx)
     implementation(libs.firebase.auth.ktx)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics.buildtools)
@@ -147,4 +146,27 @@ dependencies {
 
     // ✅ OpenCV Java bindings (JAR only, no module reference)
     implementation(files("libs/opencv-4120.jar"))
+}
+
+// ✅ Task para generar un JAR con las clases compiladas (thin jar)
+tasks.register<Jar>("buildJar") {
+    from(layout.buildDirectory.dir("intermediates/javac/debug/classes"))
+    archiveBaseName.set("celestik")
+    archiveVersion.set("1.0")
+    archiveClassifier.set("debug")
+    destinationDirectory.set(layout.buildDirectory.dir("libs"))
+}
+
+// ✅ Task para generar un JAR con tus clases + jars locales (fat jar simplificado)
+tasks.register<Jar>("buildFatJar") {
+    archiveBaseName.set("celestik-fat")
+    archiveVersion.set("1.0")
+    archiveClassifier.set("debug")
+    destinationDirectory.set(layout.buildDirectory.dir("libs"))
+
+    // Incluye tus clases compiladas
+    from(layout.buildDirectory.dir("intermediates/javac/debug/classes"))
+
+    // Incluye los jars locales de app/libs/
+    from(fileTree("libs") { include("*.jar") })
 }

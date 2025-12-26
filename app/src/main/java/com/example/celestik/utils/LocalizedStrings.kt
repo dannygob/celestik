@@ -1,5 +1,7 @@
 package com.example.celestik.utils
 
+import androidx.compose.runtime.compositionLocalOf
+
 /**
  * Contains hardcoded Spanish UI strings for the Celestik app.
  * Intended for future internationalization via CompositionLocal or dynamic loading.
@@ -19,7 +21,7 @@ data class LocalizedStrings(
     val toastOpenCalibration: String = "Navegando a calibración...",
     val toastOpenDetails: String = "Abriendo historial...",
     val toastOpenReportDialog: String = "Solicitando generación de reporte...",
-    val toastModeBody: String = "Mod Carrocería seleccionado",
+    val toastModeBody: String = "Modo Carrocería seleccionado",
     val toastModePrecision: String = "Modo Precisión seleccionado",
     val toastModeMetals: String = "Modo Metal seleccionado",
     val loginEmailLabel: String = "Email",
@@ -27,16 +29,13 @@ data class LocalizedStrings(
     val loginButtonLabel: String = "Iniciar sesión",
     val loginValidationMessage: String = "Por favor ingresa email y contraseña.",
     val loginErrorMessage: String = "Error al iniciar sesión.",
-
     val settingsTitle: String = "Configuración",
     val settingsDarkThemeLabel: String = "Tema oscuro",
     val settingsUnitLabel: String = "Usar pulgadas",
     val settingsMarkerLabel: String = "Marcador de detección",
-
     val statusScreenTitle: String = "Pantalla de estado",
     val inspectionPreviewTitle: String = "Visualización previa",
     val inspectionPreviewButton: String = "Ver componentes",
-
     val detectionDetailsLabel: String = "Detalles para la detección: %s",
     val detectionListErrorMessage: String = "❌ Error al cargar las detecciones.",
     val confirmButtonLabel: String = "Aceptar",
@@ -49,8 +48,7 @@ data class LocalizedStrings(
     val reportFieldStatus: String = "Status: %s",
     val reportSeparator: String = "--------------------",
     val reportCsvHeader: String = "ID,Tipo,Confianza,Status,Medida (mm)",
+)
 
-    )
-
-// TODO: Enable CompositionLocal for dynamic localization support
-// val LocalizedStrings = compositionLocalOf { LocalizedStrings() }
+// CompositionLocal for providing localized strings
+val LocalizedStringsProvider = compositionLocalOf { LocalizedStrings() }
