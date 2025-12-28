@@ -1,14 +1,14 @@
+
 plugins {
     // Android and Kotlin plugins
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.application) // This should be on its own line
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt.android)
-
-    // Kotlin annotation processing and parcelize support (usando alias del TOML)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.parcelize)
+    id("org.jetbrains.kotlin.kapt")
+    // The redundant parcelize plugin has been removed.
 }
+
 
 android {
     namespace = "com.example.celestik"
@@ -21,13 +21,6 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        // ✅ Native build configuration with CMake
-        externalNativeBuild {
-            cmake {
-                cppFlags += "-std=c++11"
-            }
-        }
 
         // ✅ ABI filters for native libraries (incluye ChromeOS)
         ndk {
@@ -62,14 +55,6 @@ android {
     // ✅ Enable Jetpack Compose
     buildFeatures {
         compose = true
-    }
-
-    // ✅ Link with CMake
-    externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.22.1"
-        }
     }
 
     // ✅ Include precompiled .so libraries from jniLibs
@@ -121,9 +106,9 @@ dependencies {
     implementation(libs.androidx.camera.extensions)
 
     // FIREBASE / GOOGLE (unificado: usa solo firebase_auth_ktx)
-    implementation(libs.firebase.auth.ktx)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics.buildtools)
+    //implementation(libs.firebase.auth.ktx)
+    //implementation(platform(libs.firebase.bom))
+    //implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.transportation.consumer)
     implementation(libs.gson)
     implementation(libs.litert)
@@ -144,29 +129,5 @@ dependencies {
     implementation(libs.layout)
     implementation(libs.tensorflow.lite)
 
-    // ✅ OpenCV Java bindings (JAR only, no module reference)
-    implementation(files("libs/opencv-4120.jar"))
-}
 
-// ✅ Task para generar un JAR con las clases compiladas (thin jar)
-tasks.register<Jar>("buildJar") {
-    from(layout.buildDirectory.dir("intermediates/javac/debug/classes"))
-    archiveBaseName.set("celestik")
-    archiveVersion.set("1.0")
-    archiveClassifier.set("debug")
-    destinationDirectory.set(layout.buildDirectory.dir("libs"))
-}
-
-// ✅ Task para generar un JAR con tus clases + jars locales (fat jar simplificado)
-tasks.register<Jar>("buildFatJar") {
-    archiveBaseName.set("celestik-fat")
-    archiveVersion.set("1.0")
-    archiveClassifier.set("debug")
-    destinationDirectory.set(layout.buildDirectory.dir("libs"))
-
-    // Incluye tus clases compiladas
-    from(layout.buildDirectory.dir("intermediates/javac/debug/classes"))
-
-    // Incluye los jars locales de app/libs/
-    from(fileTree("libs") { include("*.jar") })
 }
