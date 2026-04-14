@@ -1,17 +1,15 @@
 package com.example.celestik.opencv
 
-
 import android.util.Log
 import com.example.celestik.manager.AprilTagManager
 import com.example.celestik.manager.ArUcoManager
 import com.example.celestik.viewmodel.SharedViewModel
 import com.google.android.libraries.mapsplatform.transportation.consumer.model.MarkerType
 import org.opencv.aruco.Aruco
+import org.opencv.calib3d.Calib3d
 import org.opencv.core.*
 import org.opencv.imgproc.Imgproc
-import org.opencv.imgproc.Imgproc.undistort
 import org.opencv.video.Video
-
 
 class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
@@ -27,6 +25,8 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
     private val arucoManager = ArUcoManager()
     private val aprilTagManager = AprilTagManager()
 
+    var isCalibrationMode: Boolean = false
+
     init {
         aprilTagManager.init()
     }
@@ -38,18 +38,39 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
     }
 
     fun analyze(mat: Mat): AnalysisResult {
-        val grayMat = Mat()
-        val edges = Mat()
+        val grayMat = if (mat.channels() > 1) {
+            val gray = Mat()
+            Imgproc.cvtColor(mat, gray, Imgproc.COLOR_BGR2GRAY)
+            gray
+        } else {
+            mat
+        }
+
+        val annotatedMat = Mat()
+        if (mat.channels() == 1) {
+            Imgproc.cvtColor(mat, annotatedMat, Imgproc.COLOR_GRAY2BGR)
+        } else {
+            mat.copyTo(annotatedMat)
+        }
+
+        if (isCalibrationMode) {
+            val markers = detectMarkersOnly(mat)
+            if (markers.isNotEmpty()) {
+                Aruco.drawDetectedMarkers(annotatedMat, markers.map { it.corners }, Mat())
+            }
+            return AnalysisResult(emptyList(), annotatedMat, markers)
+        }
+
         val thresholdedImage = Mat()
         val watershedMarkers = Mat()
         val holes = Mat()
 
         try {
-            Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_BGR2GRAY)
-            Imgproc.GaussianBlur(grayMat, grayMat, Size(5.0, 5.0), 0.0)
+            val blurMat = Mat()
+            Imgproc.GaussianBlur(grayMat, blurMat, Size(5.0, 5.0), 0.0)
 
             Imgproc.adaptiveThreshold(
-                grayMat,
+                blurMat,
                 thresholdedImage,
                 255.0,
                 Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,
@@ -57,9 +78,10 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
                 11,
                 2.0
             )
+            blurMat.release()
 
             val markersMat = generateWatershedMarkers(thresholdedImage)
-            Imgproc.watershed(mat, markersMat)
+            Imgproc.watershed(annotatedMat, markersMat)
             watershedMarkers.setTo(Scalar(255.0), markersMat)
 
             val contours = findContours(watershedMarkers)
@@ -71,15 +93,11 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
             prevGrayMat?.let {
                 detectDeformationsWithOpticalFlow(it, grayMat)
             }
-            prevGrayMat = grayMat.clone()
+            if (prevGrayMat == null) prevGrayMat = Mat()
+            grayMat.copyTo(prevGrayMat!!)
 
-            val markers = when (sharedViewModel.markerType.value) {
-                MarkerType.ARUCO -> arucoManager.detectMarkers(mat).map { Marker(it.id, it.corners) }
-                MarkerType.APRILTAG -> aprilTagManager.detectMarkers(mat).map { Marker(it.id, cornersToMat(it.corners)) }
+            val markers = detectMarkersOnly(mat)
 
-            }
-
-            val annotatedMat = mat.clone()
             Imgproc.drawContours(annotatedMat, filteredContours, -1, Scalar(0.0, 255.0, 0.0), 2)
             Imgproc.drawContours(annotatedMat, deformations, -1, Scalar(255.0, 0.0, 0.0), 2)
 
@@ -98,14 +116,25 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
         } catch (e: Exception) {
             Log.e("FrameAnalyzer", "Error analyzing frame", e)
-            return AnalysisResult(emptyList(), mat, emptyList())
+            return AnalysisResult(emptyList(), annotatedMat, emptyList())
         } finally {
-            grayMat.release()
-            edges.release()
+            if (grayMat !== mat) grayMat.release()
             thresholdedImage.release()
             watershedMarkers.release()
             holes.release()
         }
+    }
+
+    private fun detectMarkersOnly(mat: Mat): List<Marker> {
+        return when (sharedViewModel.markerType.value) {
+            MarkerType.ARUCO -> arucoManager.detectMarkers(mat).map { Marker(it.id, it.corners) }
+            MarkerType.APRILTAG -> aprilTagManager.detectMarkers(mat).map { Marker(it.id, cornersToMat(it.corners)) }
+            else -> emptyList()
+        }
+    }
+
+    private fun filterContours(contours: List<MatOfPoint>, minArea: Double): List<MatOfPoint> {
+        return contours.filter { Imgproc.contourArea(it) > minArea }
     }
 
     private fun generateWatershedMarkers(binary: Mat): Mat {
@@ -124,13 +153,14 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
 
         val markers = Mat()
         sureFg.convertTo(markers, CvType.CV_32S)
-        return markers
-    }
 
-    fun detectEdges(image: Mat): Mat {
-        val edges = Mat()
-        Imgproc.Canny(image, edges, 100.0, 200.0)
-        return edges
+        sureBg.release()
+        distTransform.release()
+        sureFg.release()
+        unknown.release()
+        kernel.release()
+
+        return markers
     }
 
     fun applyCalibration(image: Mat, cameraMatrix: Mat, distortionCoeffs: Mat): Mat {
@@ -139,14 +169,10 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         return undistortedImage
     }
 
-    fun extractDimensionsFromContours(contours: List<MatOfPoint>): List<Double> {
-        val dimensions = mutableListOf<Double>()
-        for (contour in contours) {
-            val rect = Imgproc.boundingRect(contour)
-            dimensions.add(rect.width.toDouble())
-            dimensions.add(rect.height.toDouble())
-        }
-        return dimensions
+    fun undistortPoints(points: MatOfPoint2f, cameraMatrix: Mat, distCoeffs: Mat): MatOfPoint2f {
+        val undistortedPoints = MatOfPoint2f()
+        Calib3d.undistortPoints(points, undistortedPoints, cameraMatrix, distCoeffs, Mat(), cameraMatrix)
+        return undistortedPoints
     }
 
     private fun findContours(image: Mat): List<MatOfPoint> {
@@ -177,48 +203,43 @@ class FrameAnalyzer(private val sharedViewModel: SharedViewModel) {
         val deformations = mutableListOf<MatOfPoint>()
         for (contour in contours) {
             val approx = MatOfPoint2f()
-            val contour2f = MatOfPoint2f(*contour.toArray())
+            val contourArray = contour.toArray()
+            val contour2f = MatOfPoint2f(*contourArray)
             Imgproc.approxPolyDP(contour2f, approx, 0.04 * Imgproc.arcLength(contour2f, true), true)
-            if (approx.toArray().size > 4) {
+            if (approx.total() > 4) {
                 deformations.add(MatOfPoint(*approx.toArray()))
             }
+            approx.release()
+            contour2f.release()
         }
         return deformations
     }
 
-    fun detectCountersinks(image: Mat, template: Mat): Point? {
-        val result = Mat()
-        Imgproc.matchTemplate(image, template, result, Imgproc.TM_CCOEFF_NORMED)
-        val mmr = Core.minMaxLoc(result)
-        return if (mmr.maxVal > 0.8) mmr.maxLoc else null
-    }
-
     fun detectDeformationsWithOpticalFlow(prevFrame: Mat, nextFrame: Mat): List<Point> {
-        val prevGray = Mat()
-        val nextGray = Mat()
-        Imgproc.cvtColor(prevFrame, prevGray, Imgproc.COLOR_BGR2GRAY)
-        Imgproc.cvtColor(nextFrame, nextGray, Imgproc.COLOR_BGR2GRAY)
-
         val features = MatOfPoint()
-        Imgproc.goodFeaturesToTrack(prevGray, features, 100, 0.3, 7.0)
+        Imgproc.goodFeaturesToTrack(prevFrame, features, 100, 0.3, 7.0)
 
-        val prevPts = MatOfPoint2f(*features.toArray())
+        if (features.empty()) {
+            features.release()
+            return emptyList()
+        }
+
+        val prevPtsArray = features.toArray()
+        val prevPts = MatOfPoint2f(*prevPtsArray)
         val nextPts = MatOfPoint2f()
         val status = MatOfByte()
         val err = MatOfFloat()
 
-        Video.calcOpticalFlowPyrLK(prevGray, nextGray, prevPts, nextPts, status, err)
+        Video.calcOpticalFlowPyrLK(prevFrame, nextFrame, prevPts, nextPts, status, err)
 
-        return nextPts.toArray().toList()
-    }
+        val result = nextPts.toArray().toList()
 
-    fun calculateMeasurements(contours: List<MatOfPoint>, scale: Double): List<Double> {
-        val measurements = mutableListOf<Double>()
-        for (contour in contours) {
-            val rect = Imgproc.boundingRect(contour)
-            measurements.add(rect.width * scale)
-            measurements.add(rect.height * scale)
-        }
-        return measurements
+        features.release()
+        prevPts.release()
+        nextPts.release()
+        status.release()
+        err.release()
+
+        return result
     }
 }
